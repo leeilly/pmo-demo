@@ -1,0 +1,28 @@
+{
+  "groups": [
+    {
+      "name": "pmo.elasticsearch",
+      "type": "com.pulmuone.demo.common.property.ElasticsearchProperty",
+      "sourceType": "com.pulmuone.demo.common.property.ElasticsearchProperty"
+    }
+  ],
+  "properties": [
+    {
+      "name": "pmo.elasticsearch.alias",
+      "type": "java.lang.String",
+      "sourceType": "com.pulmuone.demo.common.property.ElasticsearchProperty"
+    },
+    {
+      "name": "pmo.elasticsearch.host",
+      "type": "java.lang.String",
+      "sourceType": "com.pulmuone.demo.common.property.ElasticsearchProperty"
+    },
+    {
+      "name": "pmo.elasticsearch.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.pulmuone.demo.common.property.ElasticsearchProperty",
+      "defaultValue": 0
+    }
+  ],
+  "hints": []
+}
