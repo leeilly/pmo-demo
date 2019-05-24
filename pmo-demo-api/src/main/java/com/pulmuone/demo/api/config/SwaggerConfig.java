@@ -16,7 +16,7 @@ public class SwaggerConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("PMO API DOCUMENT")
-                .description("LF STORE API 문서입니다. "
+                .description("PMO DEMO API 문서입니다. "
                         + "\n -공식 가이드 : [http://swagger.io](http://swagger.io)")
                 .license(" ")
                 .licenseUrl("http://unlicense.org")

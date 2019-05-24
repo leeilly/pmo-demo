@@ -46,7 +46,7 @@ subprojects {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         compileOnly ('org.projectlombok:lombok')
-        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+        annotationProcessor('org.projectlombok:lombok')
 
         compile 'mysql:mysql-connector-java'
         compile ('org.apache.commons:commons-collections4:4.1')
@@ -104,6 +104,7 @@ project(':pmo-demo-common') {
 
     dependencies {
         compile group: 'com.navercorp.lucy', name: 'lucy-xss', version: '1.6.3'
+        compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     }
 }
 

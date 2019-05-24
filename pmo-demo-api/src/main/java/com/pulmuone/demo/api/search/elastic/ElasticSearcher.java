@@ -19,45 +19,45 @@ import java.util.List;
 @Slf4j
 @Component
 public class ElasticSearcher<T> {
-//
-//    private static final String INDEX_ALIAS_NAME = "pmo_product";
-//    private static final ObjectMapper MAPPER = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-//
-//
-//    @Autowired
-//    RestHighLevelClient restHighLevelClient;
-//
-//
-//    public SearchResult<T> search(SearchSourceBuilder query, Class<T> valueType) throws Exception {
-//
-//        SearchRequest searchRequest = new SearchRequest();
-//        searchRequest.indices(INDEX_ALIAS_NAME);
-//        searchRequest.source(query);
-//        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-//
-//        SearchResult result = new SearchResult();
-//        result.setCount(searchResponse.getHits().getTotalHits().value);
-//        result.setSearchResult(convertResultList(searchResponse, valueType));
-//
-//        return result;
-//    }
-//
-//
-//    public static <T> List<T> convertResultList(SearchResponse response, Class<T> valueType) throws IllegalArgumentException, IOException {
-//        int initialSize = (int) (response.getHits().getTotalHits().value * 1.3);
-//        List<T> list = new ArrayList<>(initialSize);
-//
-//        for(SearchHit hit : response.getHits()){
-//            list.add(convertResult(hit, valueType));
-//        }
-//
-//        return list;
-//    }
-//
-//    public static <T> T convertResult(SearchHit hit, Class<T> valueType) throws IOException, IllegalArgumentException{
-//        T result = MAPPER.readValue(hit.getSourceAsString().replaceAll("@",""), valueType);
-//        return result;
-//    }
+
+    private static final String INDEX_ALIAS_NAME = "product";
+    private static final ObjectMapper MAPPER = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+
+
+    @Autowired
+    RestHighLevelClient restHighLevelClient;
+
+
+    public SearchResult<T> search(SearchSourceBuilder query, Class<T> valueType) throws Exception {
+
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(INDEX_ALIAS_NAME);
+        searchRequest.source(query);
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        SearchResult result = new SearchResult();
+        result.setCount(searchResponse.getHits().getTotalHits().value);
+        result.setSearchResult(convertResultList(searchResponse, valueType));
+
+        return result;
+    }
+
+
+    public static <T> List<T> convertResultList(SearchResponse response, Class<T> valueType) throws IllegalArgumentException, IOException {
+        int initialSize = (int) (response.getHits().getTotalHits().value * 1.3);
+        List<T> list = new ArrayList<>(initialSize);
+
+        for(SearchHit hit : response.getHits()){
+            list.add(convertResult(hit, valueType));
+        }
+
+        return list;
+    }
+
+    public static <T> T convertResult(SearchHit hit, Class<T> valueType) throws IOException, IllegalArgumentException{
+        T result = MAPPER.readValue(hit.getSourceAsString().replaceAll("@",""), valueType);
+        return result;
+    }
 
 
 

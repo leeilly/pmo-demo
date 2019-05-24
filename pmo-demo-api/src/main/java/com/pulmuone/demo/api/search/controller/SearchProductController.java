@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
@@ -31,35 +32,36 @@ public class SearchProductController {
        return "test!";
     }
 
-//
-//    @ApiOperation(value="상품검색", notes = "elasticsearch 상품 검색 결과 리스팅")
-//    @RequestMapping(value = "/product", method = RequestMethod.GET)
-//    public void searchProduct(
-//            @ApiParam("검색어") @RequestParam(value = "keyword", required = true) String keyword,
-//            @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
-//            @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "30") Integer limit,
-//            @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
-//
-//        if(StringUtils.isBlank(keyword)) {
-//            throw new Exception("Search keyword must not be null.");
-//        }
-//
-//        SearchRequestDTO dto = new SearchRequestDTO();
-//        dto.setKeyword(keyword);
-//        dto.setPage(pageNumber);
-//        dto.setLimit(limit);
-//        if(StringUtils.isNotBlank(sortCode)) {
-//            dto.setSortCode(SortCode.valueOf(sortCode));
-//        }
-//
-//        SearchQueryBinder queryBinder = new SearchQueryBinder();
-//        SearchSourceBuilder query = queryBinder.query(dto);
-//
-//        SearchResult searchResult = elasticSearcher.search(query, ProductDocumentDomain.class);
-//
-//        List<ProductDocumentDomain> list = searchResult.getSearchResult();
-//        searchResult.setSearchResult(list);
-//
-//        log.debug(list.toString());
-//    }
+
+    @ApiOperation(value="상품검색", notes = "elasticsearch 상품 검색 결과 리스팅")
+    @RequestMapping(value = "/product", method = RequestMethod.GET)
+    public String searchProduct(
+            @ApiParam("검색어") @RequestParam(value = "keyword", required = true) String keyword,
+            @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
+            @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "30") Integer limit,
+            @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
+
+        if(StringUtils.isBlank(keyword)) {
+            throw new Exception("Search keyword must not be null.");
+        }
+
+        SearchRequestDTO dto = new SearchRequestDTO();
+        dto.setKeyword(keyword);
+        dto.setPage(pageNumber);
+        dto.setLimit(limit);
+        if(StringUtils.isNotBlank(sortCode)) {
+            dto.setSortCode(SortCode.valueOf(sortCode));
+        }
+
+        SearchQueryBinder queryBinder = new SearchQueryBinder();
+        SearchSourceBuilder query = queryBinder.query(dto);
+        log.info("query= {}", query.toString());
+
+        SearchResult searchResult = elasticSearcher.search(query, ProductDocumentDomain.class);
+
+        List<ProductDocumentDomain> list = searchResult.getSearchResult();
+        searchResult.setSearchResult(list);
+
+        return list.toString();
+    }
 }
