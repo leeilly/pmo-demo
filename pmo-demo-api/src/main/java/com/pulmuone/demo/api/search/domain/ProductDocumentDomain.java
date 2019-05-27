@@ -35,6 +35,18 @@ public class ProductDocumentDomain {
     @JsonProperty
     private String categorySeq;
 
+    /** kcal */
+    @JsonProperty
+    private Integer kcal;
+
+    /** 조리시간(분단위) */
+    @JsonProperty
+    private Integer cookingMinute;
+
+    /** 성분 */
+    @JsonProperty
+    private String ingredients;
+
     /** 상품상태코드 */
     @JsonProperty
     private String statusCode;

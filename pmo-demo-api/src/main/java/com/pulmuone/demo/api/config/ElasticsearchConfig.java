@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 @Slf4j
 public class ElasticsearchConfig {
@@ -20,16 +19,12 @@ public class ElasticsearchConfig {
     @Value("${pmo.elasticsearch.port}")
     private int port;
 
-    private static final int TIMEOUT_MILLISEC = 20000;
-
+    private static final int TIMEOUT_MILLISEC = 2000;
 
     @Bean(destroyMethod = "close")
     public RestHighLevelClient restHighLevelClient() {
-       //return  new RestHighLevelClient(
-       //         RestClient.builder(new HttpHost(host)));
-
-       return new RestHighLevelClient(RestClient.builder(new HttpHost(host, port, "http")).setMaxRetryTimeoutMillis(TIMEOUT_MILLISEC));
-
+        log.info("RestHighLevelClient init...");
+        return new RestHighLevelClient(RestClient.builder(new HttpHost(host, port, "http")).setMaxRetryTimeoutMillis(TIMEOUT_MILLISEC));
     }
 
 

@@ -16,6 +16,9 @@ public class SearchRequestDTO {
     private String keyword;
 
     /** filter */
+    private Integer kcal;
+    private Integer cookingMinute;
+    private String ingredients;
 
 
     /** sort code : default = new */

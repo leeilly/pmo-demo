@@ -1,0 +1,19 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pulmuone.demo.api.search.mapper.SearchIndexMapper">
+
+    <select id="selectIndexTargetList" resultType="com.pulmuone.demo.api.search.domain.ProductDocumentDomain">
+        SELECT /* id=selectIndexTargetList */
+            product_seq
+            , name
+            , search_keyword
+            , category_seq
+            , category_name
+            , score
+            , kcal
+            , cooking_minute
+            , ingredients
+            , create_ymdt
+        FROM product
+    </select>
+
+</mapper>
