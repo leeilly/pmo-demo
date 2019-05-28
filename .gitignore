@@ -1,0 +1,10 @@
+.idea/
+.settings/
+.classpath
+.project
+build/
+target/
+bin/
+.gradle
+pmo-demo-common/src/main/generated
+
