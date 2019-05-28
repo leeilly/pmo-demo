@@ -16,4 +16,15 @@
         FROM product
     </select>
 
+    <select id="selectAutoCompleteIndexTargetList" resultType="com.pulmuone.demo.api.search.domain.ProductAutoCompleteDomain">
+        SELECT /* id=selectAutoCompleteIndexTargetList */
+            name
+            , name as nameNgram
+            , name as nameNgramEdge
+            , name as nameNgramEdgeBack
+            , name as nameChosung
+            , name as nameJamo
+        FROM product
+    </select>
+
 </mapper>

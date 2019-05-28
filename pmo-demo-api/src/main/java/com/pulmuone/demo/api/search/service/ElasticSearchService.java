@@ -3,6 +3,7 @@ package com.pulmuone.demo.api.search.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.pulmuone.demo.api.search.domain.ProductAutoCompleteDomain;
 import com.pulmuone.demo.api.search.domain.ProductDocumentDomain;
 import com.pulmuone.demo.api.search.domain.SearchResult;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
@@ -87,10 +88,23 @@ public class ElasticSearchService<T> {
 
     }
 
-    static IndexRequest createIndexRequest(String indexName, Map<String, Object> data) {
+    public IndexRequest createIndexRequest(String indexName, Map<String, Object> data) {
         IndexRequest request = new IndexRequest(indexName);
         request.source(data);
         return request;
     }
+
+    public void createAutoCompleteIndex(String indexName) throws IOException {
+
+        List<ProductAutoCompleteDomain> list = searchIndexMapper.selectAutoCompleteIndexTargetList();
+
+        BulkRequest request = new BulkRequest();
+        list.stream().forEach(data -> request.add(createIndexRequest(indexName, MAPPER.convertValue((Object) data, Map.class))));
+        BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
+
+        log.info("bulk insert done. total: {}", response.getItems().length);
+
+    }
+
 
 }

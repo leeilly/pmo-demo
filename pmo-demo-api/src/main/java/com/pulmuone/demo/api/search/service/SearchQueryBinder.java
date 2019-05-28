@@ -22,7 +22,7 @@ public class SearchQueryBinder {
             throw new Exception("[Search Exception] Search keyword must not be null.");
         }
 
-        //fixme: 관리필요함. 따로 뺄 것.
+        //fixme: 관리필요함.
         String[] keywordIndexFields = new String[]{
                 "name"
                 ,"search_keyword"
@@ -32,6 +32,12 @@ public class SearchQueryBinder {
 
         QueryBuilder multiKeywordQuery = QueryBuilders.multiMatchQuery(requestDTO.getKeyword(),keywordIndexFields).operator(Operator.AND);
         query.must(multiKeywordQuery);
+
+        //선호 식품 필터
+        if(StringUtils.isNotBlank(requestDTO.getPreferredFood())) {
+            QueryBuilder preferredFoodQuery = QueryBuilders.matchQuery("ingredients", requestDTO.getPreferredFood()).operator(Operator.AND);
+            query.must(preferredFoodQuery);
+        }
 
         SearchSourceBuilder sourceQuery = sourceQuery(requestDTO);
         sourceQuery.query(query);

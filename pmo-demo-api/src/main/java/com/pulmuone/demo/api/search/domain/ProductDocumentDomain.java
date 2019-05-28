@@ -17,7 +17,7 @@ public class ProductDocumentDomain {
 
     /** 상품번호 */
     @JsonProperty
-    private Long productSeq;
+    private Long productSeq ;
 
     /** 상품명 */
     @JsonProperty

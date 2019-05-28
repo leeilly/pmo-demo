@@ -47,6 +47,8 @@ public class SearchController {
             dto.setSortCode(SortCode.valueOf(sortCode));
         }
 
+        dto.setPreferredFood("감");
+
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.query(dto);
         log.info("query= {}", query.toString());
