@@ -20,6 +20,7 @@ public class SearchRequestDTO {
     private Integer cookingMinute;
     private String ingredients;
     private String preferredFood;
+    private String excludedFoodIngredients;
 
 
     /** sort code : default = new */

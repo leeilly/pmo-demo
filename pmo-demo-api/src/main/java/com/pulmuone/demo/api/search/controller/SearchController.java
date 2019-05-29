@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -31,6 +32,10 @@ public class SearchController {
     @RequestMapping(value = "/product", method = RequestMethod.GET)
     public SearchResult<ProductDocumentDomain> searchProduct(
             @ApiParam("검색어") @RequestParam(value = "keyword", required = true) String keyword,
+            @ApiParam("선호 식품 (optional)") @RequestParam(value = "preferredFood", required = false) String preferredFood,
+            @ApiParam("알레르기 유발 식품 제외(optional)") @RequestParam(value = "excludedFoodIngredients", required = false) String excludedFoodIngredients,
+            @ApiParam("조리시간(optional)") @RequestParam(value = "cookingMinute", required = false) Integer cookingMinute,
+            @ApiParam("칼로리(optional)") @RequestParam(value = "kcal", required = false) Integer kcal,
             @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
             @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "30") Integer limit,
             @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
@@ -47,7 +52,16 @@ public class SearchController {
             dto.setSortCode(SortCode.valueOf(sortCode));
         }
 
-        dto.setPreferredFood("감");
+        if(StringUtils.isNotBlank(preferredFood)) {
+            dto.setPreferredFood(preferredFood);
+        }
+
+        if(StringUtils.isNotBlank(excludedFoodIngredients)) {
+            dto.setExcludedFoodIngredients(excludedFoodIngredients);
+        }
+
+        dto.setKcal(Optional.ofNullable(kcal).orElse(0));
+        dto.setCookingMinute(Optional.ofNullable(cookingMinute).orElse(0));
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.query(dto);
