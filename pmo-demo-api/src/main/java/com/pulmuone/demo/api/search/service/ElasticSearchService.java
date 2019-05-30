@@ -3,6 +3,8 @@ package com.pulmuone.demo.api.search.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.pulmuone.demo.api.search.analyzer.KoreanChosungParser;
+import com.pulmuone.demo.api.search.analyzer.KoreanJamoParser;
 import com.pulmuone.demo.api.search.domain.ProductAutoCompleteDomain;
 import com.pulmuone.demo.api.search.domain.ProductDocumentDomain;
 import com.pulmuone.demo.api.search.domain.SearchResult;
@@ -20,6 +22,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,17 +97,52 @@ public class ElasticSearchService<T> {
         return request;
     }
 
-    public void createAutoCompleteIndex(String indexName) throws IOException {
+    public void createAutoCompleteIndex(String indexName) {
+        try {
+            KoreanJamoParser parser1 = new KoreanJamoParser();
+            KoreanChosungParser parser2 = new KoreanChosungParser();
+            List<ProductAutoCompleteDomain> list = searchIndexMapper.selectAutoCompleteIndexTargetList();
 
-        List<ProductAutoCompleteDomain> list = searchIndexMapper.selectAutoCompleteIndexTargetList();
+            if ("auto4".equals(indexName)) {
+                list.forEach(l -> {
+                    l.setNameJamo(parser1.parse(l.getName()));
+                    l.setNameChosung(parser2.parse(l.getName()));
+                });
+            } else {
 
-        BulkRequest request = new BulkRequest();
-        list.stream().forEach(data -> request.add(createIndexRequest(indexName, MAPPER.convertValue((Object) data, Map.class))));
-        BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
+                list.forEach(l -> {
+                    l.setNameJamo(parser1.parse(l.getName()));
+                    l.setNameChosung(parser2.parse(l.getName()));
+                    //l.setNameJamoNgram(parser1.parse(l.getName()));
+                    //l.setNameJamoNgramEdge(parser1.parse(l.getName()));
+                    //l.setNameJamoNgramEdgeBack(parser1.parse(l.getName()));
+                });
+            }
 
-        log.info("bulk insert done. total: {}", response.getItems().length);
+
+            BulkRequest request = new BulkRequest();
+            list.stream().forEach(data -> request.add(createIndexRequest(indexName, MAPPER.convertValue((Object) data, Map.class))));
+            BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
+
+            log.info("bulk insert done. total: {}", response.getItems().length);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
+
+    public SearchResult searchAutoComplete(SearchSourceBuilder query, Class<T> valueType) throws IOException {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("auto4");
+        searchRequest.source(query);
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        SearchResult result = new SearchResult();
+        result.setCount(searchResponse.getHits().getTotalHits().value);
+        result.setSearchResult(convertResultList(searchResponse, valueType));
+
+        return result;
+    }
 
 }

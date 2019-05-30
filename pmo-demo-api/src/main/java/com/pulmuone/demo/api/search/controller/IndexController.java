@@ -27,7 +27,12 @@ public class IndexController {
             elasticSearchService.createIndex(indexName);
         }else if( "auto".equals(indexName) ){
             elasticSearchService.createAutoCompleteIndex(indexName);
+        }else if( "auto2".equals(indexName) ){
+            elasticSearchService.createAutoCompleteIndex(indexName);
+        }else if( "auto4".equals(indexName) ){
+            elasticSearchService.createAutoCompleteIndex(indexName);
         }
+
 
     }
 

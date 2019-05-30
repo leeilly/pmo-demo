@@ -1,8 +1,14 @@
 package com.pulmuone.demo.api.search.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ProductAutoCompleteDomain {
+    @JsonProperty
+    private Integer score;
 
     @JsonProperty
     private String name;
@@ -21,5 +27,17 @@ public class ProductAutoCompleteDomain {
 
     @JsonProperty
     private String nameJamo;
+
+//    @JsonProperty
+//    private String nameJamoNgram;
+//
+//    @JsonProperty
+//    private String nameJamoNgramEdge;
+//
+//    @JsonProperty
+//    private String nameJamoNgramEdgeBack;
+
+
+
 }
 

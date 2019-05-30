@@ -8,8 +8,7 @@ import org.elasticsearch.search.sort.SortOrder;
 public enum SortCode {
 
     NEW("create_ymdt", SortOrder.DESC)
-    ,LOW_PRICE("price", SortOrder.ASC)
-    ,HIGH_PRICE("price", SortOrder.DESC)
+    ,SCORE("score", SortOrder.DESC)
     ;
 
     private final String field;

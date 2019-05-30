@@ -24,6 +24,7 @@
             , name as nameNgramEdgeBack
             , name as nameChosung
             , name as nameJamo
+            , score
         FROM product
     </select>
 
