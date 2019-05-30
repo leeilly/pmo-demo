@@ -1,5 +1,6 @@
-package com.pulmuone.demo.api.search.analyzer;
+package com.pulmuone.demo.api.search.parser;
 
+import com.pulmuone.demo.api.util.JamoUtil;
 import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractKoreanParser {

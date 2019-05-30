@@ -3,8 +3,8 @@ package com.pulmuone.demo.api.search.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.pulmuone.demo.api.search.analyzer.KoreanChosungParser;
-import com.pulmuone.demo.api.search.analyzer.KoreanJamoParser;
+import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
+import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import com.pulmuone.demo.api.search.domain.ProductAutoCompleteDomain;
 import com.pulmuone.demo.api.search.domain.ProductDocumentDomain;
 import com.pulmuone.demo.api.search.domain.SearchResult;
@@ -22,7 +22,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

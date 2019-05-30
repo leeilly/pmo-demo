@@ -1,4 +1,4 @@
-package com.pulmuone.demo.api.search.analyzer;
+package com.pulmuone.demo.api.util;
 
 import java.util.List;
 

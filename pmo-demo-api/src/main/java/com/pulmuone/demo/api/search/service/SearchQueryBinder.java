@@ -1,7 +1,7 @@
 package com.pulmuone.demo.api.search.service;
 
-import com.pulmuone.demo.api.search.analyzer.KoreanChosungParser;
-import com.pulmuone.demo.api.search.analyzer.KoreanJamoParser;
+import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
+import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import com.pulmuone.demo.api.search.domain.SortCode;
 import com.pulmuone.demo.api.search.dto.SearchRequestDTO;
 import lombok.extern.slf4j.Slf4j;
