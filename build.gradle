@@ -59,6 +59,10 @@ subprojects {
         compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        // jstl
+        compile("javax.servlet:jstl:1.2")
+        compile("org.apache.tomcat.embed:tomcat-embed-jasper")
     }
 }
 
@@ -79,7 +83,7 @@ configure(subprojects.findAll {it.name == 'pmo-demo-common'} ) {
 }
 
 // war 플젝 구성
-configure(subprojects.findAll {it.name == 'pmo-demo-api'} ) {
+configure(subprojects.findAll {it.name == 'pmo-demo-api' || it.name == 'pmo-demo-admin'} ) {
     println "configure project name is : $it.name : " + it.name + " : " + project.name
 
     apply plugin: 'war'
@@ -128,5 +132,23 @@ project(':pmo-demo-api') {
         // lucy xss servlet filter
         compile group: 'com.navercorp.lucy', name: 'lucy-xss-servlet', version: '2.0.0'
 
+        
+
     }
+}
+
+project(':pmo-demo-admin') {
+    dependencies {
+        compile project(':pmo-demo-common')
+
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+        // mybatis
+        compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1")
+        compile group: 'com.navercorp.lucy', name: 'lucy-xss', version: '1.6.3'
+
+        compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+        
+    }
+
+
 }

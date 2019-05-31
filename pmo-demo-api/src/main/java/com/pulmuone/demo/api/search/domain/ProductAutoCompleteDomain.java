@@ -27,17 +27,5 @@ public class ProductAutoCompleteDomain {
 
     @JsonProperty
     private String nameJamo;
-
-//    @JsonProperty
-//    private String nameJamoNgram;
-//
-//    @JsonProperty
-//    private String nameJamoNgramEdge;
-//
-//    @JsonProperty
-//    private String nameJamoNgramEdgeBack;
-
-
-
 }
 

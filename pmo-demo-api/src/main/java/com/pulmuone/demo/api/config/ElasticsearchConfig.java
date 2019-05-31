@@ -19,7 +19,7 @@ public class ElasticsearchConfig {
     @Value("${pmo.elasticsearch.port}")
     private int port;
 
-    private static final int TIMEOUT_MILLISEC = 2000;
+    private static final int TIMEOUT_MILLISEC = 20000;
 
     @Bean(destroyMethod = "close")
     public RestHighLevelClient restHighLevelClient() {

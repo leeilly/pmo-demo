@@ -8,6 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/pmo-demo-admin" />
             <option value="$PROJECT_DIR$/pmo-demo-api" />
             <option value="$PROJECT_DIR$/pmo-demo-common" />
           </set>

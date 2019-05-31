@@ -72,7 +72,6 @@ public class ElasticSearchService<T> {
         log.info("hit.getSourceAsString(): {} ", hit.getSourceAsString());
         T result = MAPPER.readValue(hit.getSourceAsString(), valueType);
 
-        log.info("result.toString(): {}", result.toString());;
         return result;
     }
 
@@ -98,23 +97,20 @@ public class ElasticSearchService<T> {
 
     public void createAutoCompleteIndex(String indexName) {
         try {
-            KoreanJamoParser parser1 = new KoreanJamoParser();
-            KoreanChosungParser parser2 = new KoreanChosungParser();
+            KoreanJamoParser jamoParser = new KoreanJamoParser();
+            KoreanChosungParser chosungParser = new KoreanChosungParser();
             List<ProductAutoCompleteDomain> list = searchIndexMapper.selectAutoCompleteIndexTargetList();
 
             if ("auto4".equals(indexName)) {
                 list.forEach(l -> {
-                    l.setNameJamo(parser1.parse(l.getName()));
-                    l.setNameChosung(parser2.parse(l.getName()));
+                    l.setNameJamo(jamoParser.parse(l.getName()));
+                    l.setNameChosung(chosungParser.parse(l.getName()));
                 });
             } else {
 
                 list.forEach(l -> {
-                    l.setNameJamo(parser1.parse(l.getName()));
-                    l.setNameChosung(parser2.parse(l.getName()));
-                    //l.setNameJamoNgram(parser1.parse(l.getName()));
-                    //l.setNameJamoNgramEdge(parser1.parse(l.getName()));
-                    //l.setNameJamoNgramEdgeBack(parser1.parse(l.getName()));
+                    l.setNameJamo(jamoParser.parse(l.getName()));
+                    l.setNameChosung(chosungParser.parse(l.getName()));
                 });
             }
 

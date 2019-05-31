@@ -1,7 +1,5 @@
 package com.pulmuone.demo.api.search.parser;
 
-import com.pulmuone.demo.api.util.JamoUtil;
-
 public class KoreanJamoParser extends AbstractKoreanParser {
     @Override
     protected void processForKoreanChar(StringBuilder sb, char chosung, char jungsung, char jongsung) {

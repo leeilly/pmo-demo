@@ -77,7 +77,7 @@ public class SearchController {
 
     @ApiOperation(value="자동완성 검색", notes = "elasticsearch 상품 자동완성 검색")
     @RequestMapping(value = "/product/auto_complete", method = RequestMethod.GET)
-    public ResponseEntity<ApiResult<SearchResult>> searchProduct(
+    public ResponseEntity<ApiResult<SearchResult>> searchAutoComplete(
             @ApiParam("검색어") @RequestParam(value = "keyword", required = true) String keyword,
             @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
             @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
