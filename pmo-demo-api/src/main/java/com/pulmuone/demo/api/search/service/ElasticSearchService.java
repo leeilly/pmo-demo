@@ -38,7 +38,7 @@ public class ElasticSearchService<T> {
     SearchIndexMapper searchIndexMapper;
 
 
-    private static final String INDEX_ALIAS_NAME = "product";
+    private static final String INDEX_ALIAS_NAME = "test";
     private static final ObjectMapper MAPPER = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public SearchResult<T> search(SearchSourceBuilder query, Class<T> valueType) throws Exception {

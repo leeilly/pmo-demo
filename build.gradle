@@ -63,6 +63,8 @@ subprojects {
         // jstl
         compile("javax.servlet:jstl:1.2")
         compile("org.apache.tomcat.embed:tomcat-embed-jasper")
+
+        compile('org.springframework.boot:spring-boot-devtools')
     }
 }
 
@@ -144,9 +146,8 @@ project(':pmo-demo-admin') {
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
         // mybatis
         compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1")
-        compile group: 'com.navercorp.lucy', name: 'lucy-xss', version: '1.6.3'
 
-        compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+        //compile('org.springframework.boot:spring-boot-starter-thymeleaf')
         
     }
 

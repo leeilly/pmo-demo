@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +37,7 @@ public class SearchController {
             @ApiParam("선호 식품 (optional)") @RequestParam(value = "preferredFood", required = false) String preferredFood,
             @ApiParam("알레르기 유발 식품 제외(optional)") @RequestParam(value = "excludedFoodIngredients", required = false) String excludedFoodIngredients,
             @ApiParam("조리시간(optional)") @RequestParam(value = "cookingMinute", required = false) Integer cookingMinute,
-            @ApiParam("칼로리(optional)") @RequestParam(value = "kcal", required = false) Integer kcal,
+            @ApiParam("칼로리(optional)") @RequestParam(value = "kcal", required = false) String kcal,
             @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
             @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "30") Integer limit,
             @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
@@ -60,7 +62,17 @@ public class SearchController {
             dto.setExcludedFoodIngredients(excludedFoodIngredients);
         }
 
-        dto.setKcal(Optional.ofNullable(kcal).orElse(0));
+        if(StringUtils.isNotBlank(kcal)) {
+            int max = 0;
+            String[] kcalArr = kcal.split(",");
+            max = Arrays.stream(kcalArr).mapToInt(v-> Integer.parseInt(v)).max().getAsInt();
+            dto.setKcal(max);
+            log.info("max: {}", max);
+        }else{
+            dto.setKcal(0);
+        }
+
+       // dto.setKcal(Optional.ofNullable(kcal).orElse(0));
         dto.setCookingMinute(Optional.ofNullable(cookingMinute).orElse(0));
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();

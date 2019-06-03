@@ -23,7 +23,7 @@ public class IndexController {
     @RequestMapping(value = "/product", method = RequestMethod.GET)
     public void indexProduct( @ApiParam("인덱스명") @RequestParam(value = "indexName", required = true) String indexName) throws Exception {
 
-        if( "product".equals(indexName) ) {
+        if( "product".equals(indexName) || "test".equals(indexName) ) {
             elasticSearchService.createIndex(indexName);
         }else if( "auto".equals(indexName) ){
             elasticSearchService.createAutoCompleteIndex(indexName);

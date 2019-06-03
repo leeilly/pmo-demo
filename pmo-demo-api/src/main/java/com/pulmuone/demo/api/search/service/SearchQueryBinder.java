@@ -132,7 +132,7 @@ public class SearchQueryBinder {
 
         //알레르기 유발 식품 제외
         if(StringUtils.isNotBlank(requestDTO.getExcludedFoodIngredients())) {
-            QueryBuilder excludedFoodIngredientsQuery = QueryBuilders.matchQuery("ingredients", requestDTO.getExcludedFoodIngredients()).operator(Operator.AND);
+            QueryBuilder excludedFoodIngredientsQuery = QueryBuilders.matchQuery("ingredients", requestDTO.getExcludedFoodIngredients()).operator(Operator.OR);
             query.mustNot(excludedFoodIngredientsQuery);
         }
 
