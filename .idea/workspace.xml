@@ -2,36 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8df59ad9-3f3e-4e11-9f7e-6fb8a34bc011" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/fileContent/fileContent.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/jarAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/taskHistory/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.3/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.3/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/config/ElasticsearchConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/config/ElasticsearchConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/search/controller/SearchController.class" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/search/controller/SearchController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/search/service/ElasticSearchService.class" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/search/service/ElasticSearchService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/search/service/SearchQueryBinder.class" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/build/classes/java/main/com/pulmuone/demo/api/search/service/SearchQueryBinder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/build/resources/main/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/build/resources/main/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/config/ElasticsearchConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/config/ElasticsearchConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/controller/SearchController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/controller/SearchController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/domain/ProductAutoCompleteDomain.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/domain/ProductAutoCompleteDomain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/parser/AbstractKoreanParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/parser/AbstractKoreanParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/parser/KoreanJamoParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/parser/KoreanJamoParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/service/ElasticSearchService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/service/ElasticSearchService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/util/HangulUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/parser/HangulUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/util/JamoUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/parser/JamoUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pmo-demo-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-api/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -81,43 +59,28 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/domain/SortCode.java">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="23" column="12" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="12" />
+            <state relative-caret-position="765">
+              <caret line="133" lean-forward="true" selection-start-line="133" selection-end-line="133" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/service/ElasticSearchService.java">
+        <entry file="file://$PROJECT_DIR$/pmo-demo-admin/src/main/resources/banner.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="43" column="14" selection-start-line="43" selection-start-column="14" selection-end-line="43" selection-end-column="14" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/config/ElasticsearchConfig.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="31" selection-start-line="31" selection-end-line="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="152">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="651">
-              <caret line="127" column="18" lean-forward="true" selection-start-line="127" selection-start-column="18" selection-end-line="127" selection-end-column="18" />
+            <state relative-caret-position="152">
+              <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -158,8 +121,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            <state>
+              <caret column="28" selection-start-column="28" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application-dev.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="19">
+              <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/resources/application-dev.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="513">
+              <caret line="27" column="23" lean-forward="true" selection-end-line="31" selection-end-column="78" />
             </state>
           </provider>
         </entry>
@@ -169,15 +150,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="190">
               <caret line="10" column="9" lean-forward="true" selection-start-line="6" selection-end-line="17" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/settings.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -215,8 +187,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pmo-demo-common/src/main/java/com/pulmuone/demo/common/property/ElasticsearchProperty.java" />
-        <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/domain/SearchProductDocumentDomain.java" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/interceptor/QueryLogInterceptor.java" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/DemoApiApplication.java" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/config/WebConfig.java" />
@@ -234,7 +204,6 @@
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/config/DataSourceConfig.java" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/domain/ProductDocumentDomain.java" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/mapper/SearchIndexMapper.java" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/dto/SearchRequestDTO.java" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/search/domain/CaloriesRangeCode.java" />
         <option value="$PROJECT_DIR$/pmo-demo-api/src/main/resources/application-dev.properties" />
@@ -264,8 +233,11 @@
         <option value="$PROJECT_DIR$/settings.gradle" />
         <option value="$PROJECT_DIR$/pmo-demo-admin/src/main/java/com/pulmuone/demo/admin/DemoAdminApplication.java" />
         <option value="$PROJECT_DIR$/pmo-demo-admin/src/main/java/com/pulmuone/demo/admin/search/controller/SearchAdminController.java" />
-        <option value="$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/pmo-demo-admin/src/test/resources/banner.txt" />
+        <option value="$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application-dev.properties" />
+        <option value="$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application.properties" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -315,6 +287,25 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pmo-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pmo-demo" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="pmo-demo-admin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pmo-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pmo-demo" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="pmo-demo-admin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="pmo-demo" type="b2602c69:ProjectViewProjectNode" />
@@ -438,6 +429,7 @@
       <recent name="com.pulmuone.demo.api.search.controller" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pmo-demo-admin/src/main/resources" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
@@ -602,7 +594,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1558599298779</updated>
-      <workItem from="1558599301662" duration="92105000" />
+      <workItem from="1558599301662" duration="93705000" />
     </task>
     <servers />
   </component>
@@ -639,10 +631,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="92105000" />
+    <option name="totallyTimeSpent" value="93705000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1680" y="76" width="2560" height="1417" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" />
       <window_info id="Image Layers" />
@@ -650,11 +643,11 @@
       <window_info id="UI Designer" />
       <window_info id="Favorites" side_tool="true" />
       <window_info id="Web" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18665607" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18665607" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Build" weight="0.32961783" />
       <window_info anchor="bottom" id="Spring" />
-      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.21509434" />
+      <window_info anchor="bottom" id="Terminal" weight="0.21509434" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Messages" />
@@ -663,7 +656,7 @@
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32961783" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3743396" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3735849" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39968154" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -722,23 +715,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pmo-demo-common/src/main/java/com/pulmuone/demo/common/property/ElasticsearchProperty.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pmo-demo-common/build/classes/java/main/com/pulmuone/demo/common/property/ElasticsearchProperty.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/index/ElasticsearchIndexer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -808,13 +784,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/java/com/pulmuone/demo/api/config/DataSourceConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
@@ -849,13 +818,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/resources/application-dev.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="23" selection-start-line="23" selection-end-line="31" selection-end-column="78" />
         </state>
       </provider>
     </entry>
@@ -1125,17 +1087,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application.properties">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="765">
+          <caret line="133" lean-forward="true" selection-start-line="133" selection-end-line="133" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
+    <entry file="file://$PROJECT_DIR$/pmo-demo-admin/src/main/resources/banner.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="651">
-          <caret line="127" column="18" lean-forward="true" selection-start-line="127" selection-start-column="18" selection-end-line="127" selection-end-column="18" />
+        <state relative-caret-position="152">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pmo-demo-api/src/main/resources/application-dev.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="27" column="23" lean-forward="true" selection-end-line="31" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application-dev.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pmo-demo-admin/src/main/resources/application.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="28" selection-start-column="28" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
         </state>
       </provider>
     </entry>

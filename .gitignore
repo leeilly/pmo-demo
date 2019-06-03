@@ -3,8 +3,9 @@
 .classpath
 .project
 build/
+.build/
 target/
 bin/
-.gradle
+.gradle/
 pmo-demo-common/src/main/generated
 
