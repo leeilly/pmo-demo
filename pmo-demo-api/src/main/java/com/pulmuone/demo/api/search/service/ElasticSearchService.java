@@ -3,6 +3,7 @@ package com.pulmuone.demo.api.search.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.pulmuone.demo.api.search.domain.AnalyzeResultDomain;
 import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
 import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import com.pulmuone.demo.api.search.domain.ProductAutoCompleteDomain;
@@ -10,6 +11,9 @@ import com.pulmuone.demo.api.search.domain.ProductDocumentDomain;
 import com.pulmuone.demo.api.search.domain.SearchResult;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequest;
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
+import org.elasticsearch.action.admin.indices.analyze.DetailAnalyzeResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -38,7 +42,9 @@ public class ElasticSearchService<T> {
     SearchIndexMapper searchIndexMapper;
 
 
-    private static final String INDEX_ALIAS_NAME = "test";
+    private static final String INDEX_ALIAS_NAME = "product";
+    private static final String AC_INDEX_ALIAS_NAME = "product_ac";
+
     private static final ObjectMapper MAPPER = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public SearchResult<T> search(SearchSourceBuilder query, Class<T> valueType) throws Exception {
@@ -101,7 +107,7 @@ public class ElasticSearchService<T> {
             KoreanChosungParser chosungParser = new KoreanChosungParser();
             List<ProductAutoCompleteDomain> list = searchIndexMapper.selectAutoCompleteIndexTargetList();
 
-            if ("auto4".equals(indexName)) {
+            if (AC_INDEX_ALIAS_NAME.equals(indexName)) {
                 list.forEach(l -> {
                     l.setNameJamo(jamoParser.parse(l.getName()));
                     l.setNameChosung(chosungParser.parse(l.getName()));
@@ -129,7 +135,7 @@ public class ElasticSearchService<T> {
 
     public SearchResult searchAutoComplete(SearchSourceBuilder query, Class<T> valueType) throws IOException {
         SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("auto4");
+        searchRequest.indices(AC_INDEX_ALIAS_NAME);
         searchRequest.source(query);
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
 
@@ -140,4 +146,32 @@ public class ElasticSearchService<T> {
         return result;
     }
 
+    public List<AnalyzeResultDomain> analyze(String keyword, String analyzerName) {
+
+        List list = new ArrayList();
+
+        AnalyzeRequest analyzeRequest = new AnalyzeRequest();
+        analyzeRequest.index("product");
+        analyzeRequest.text(keyword);
+        analyzeRequest.analyzer(analyzerName);
+        try {
+            AnalyzeResponse response = restHighLevelClient.indices().analyze(analyzeRequest, RequestOptions.DEFAULT);
+            List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
+            DetailAnalyzeResponse detail = response.detail();
+
+            tokens.stream().forEach(t -> {
+                    AnalyzeResultDomain analyzeResultDomain = new AnalyzeResultDomain();
+                    analyzeResultDomain.setTerm(t.getTerm());
+                    analyzeResultDomain.setType(t.getType());
+                    list.add(analyzeResultDomain);
+                }
+            );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+
+    }
 }
