@@ -7,7 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SearchAdminController {
 
     @RequestMapping("/")
-    public String hello(){
+    public String index(){
         return "index";
+    }
+
+    @RequestMapping("/search-demo")
+    public String searchDemo(){
+        return "searchDemo";
     }
 }

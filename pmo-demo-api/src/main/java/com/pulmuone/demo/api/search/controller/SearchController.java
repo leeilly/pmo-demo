@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -36,8 +35,8 @@ public class SearchController {
             @ApiParam("검색어") @RequestParam(value = "keyword", required = true) String keyword,
             @ApiParam("선호 식품 (optional)") @RequestParam(value = "preferredFood", required = false) String preferredFood,
             @ApiParam("알레르기 유발 식품 제외(optional)") @RequestParam(value = "excludedFoodIngredients", required = false) String excludedFoodIngredients,
-            @ApiParam("조리시간(optional)") @RequestParam(value = "cookingMinute", required = false) Integer cookingMinute,
-            @ApiParam("칼로리(optional)") @RequestParam(value = "kcal", required = false) String kcal,
+            @ApiParam("조리시간(optional)") @RequestParam(value = "cookingMinuteRangeCode", required = false) String cookingMinuteRangeCode,
+            @ApiParam("칼로리(optional)") @RequestParam(value = "kcalRangeCode", required = false) String kcalRangeCode,
             @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
             @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "30") Integer limit,
             @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
@@ -62,18 +61,16 @@ public class SearchController {
             dto.setExcludedFoodIngredients(excludedFoodIngredients);
         }
 
-        if(StringUtils.isNotBlank(kcal)) {
-            int max = 0;
-            String[] kcalArr = kcal.split(",");
-            max = Arrays.stream(kcalArr).mapToInt(v-> Integer.parseInt(v)).max().getAsInt();
-            dto.setKcal(max);
-            log.info("max: {}", max);
-        }else{
-            dto.setKcal(0);
+        if(StringUtils.isNotBlank(cookingMinuteRangeCode)) {
+            log.info("cookingMinute: {}", cookingMinuteRangeCode );
+            dto.setCookingMinuteRangeCode(CookingMinuteRangeCode.valueOf(cookingMinuteRangeCode));
         }
 
-       // dto.setKcal(Optional.ofNullable(kcal).orElse(0));
-        dto.setCookingMinute(Optional.ofNullable(cookingMinute).orElse(0));
+        if(StringUtils.isNotBlank(kcalRangeCode)) {
+            log.info("kcalRangeCode: {}", kcalRangeCode );
+            dto.setKcalRangeCode(KcalRangeCode.valueOf(kcalRangeCode));
+        }
+
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.query(dto);

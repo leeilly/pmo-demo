@@ -146,7 +146,6 @@ project(':pmo-demo-admin') {
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
         // mybatis
         compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1")
-
         //compile('org.springframework.boot:spring-boot-starter-thymeleaf')
         
     }

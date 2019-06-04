@@ -1,5 +1,7 @@
 package com.pulmuone.demo.api.search.service;
 
+import com.pulmuone.demo.api.search.domain.CookingMinuteRangeCode;
+import com.pulmuone.demo.api.search.domain.KcalRangeCode;
 import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
 import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import com.pulmuone.demo.api.search.domain.SortCode;
@@ -136,37 +138,48 @@ public class SearchQueryBinder {
             query.mustNot(excludedFoodIngredientsQuery);
         }
 
-        //칼로리
-        if(requestDTO.getKcal() > 0 ) {
-
+        //kcal
+        log.info("KcalRangeCode: {}", requestDTO.getKcalRangeCode());
+        if( requestDTO.getKcalRangeCode() != null ) {
             QueryBuilder caloriesQuery = null;
-
-            if(requestDTO.getKcal() <= 200) {
-                caloriesQuery = QueryBuilders.rangeQuery("kcal").gte(0).lte(200);
-            }else if(requestDTO.getKcal() > 200 && requestDTO.getKcal() <= 300) {
-                caloriesQuery = QueryBuilders.rangeQuery("kcal").gte(200).lte(300);
-            }else if(requestDTO.getKcal() > 300 && requestDTO.getKcal() <= 400){
-                caloriesQuery = QueryBuilders.rangeQuery("kcal").gte(300).lte(400);
-            }else if(requestDTO.getKcal() > 400 && requestDTO.getKcal() <= 500){
-                caloriesQuery = QueryBuilders.rangeQuery("kcal").gte(400).lte(500);
+            if (KcalRangeCode.KCAL200.equals(requestDTO.getKcalRangeCode())) {
+                caloriesQuery = KcalRangeCode.KCAL200.query();
+            } else if (KcalRangeCode.KCAL300.equals(requestDTO.getKcalRangeCode())) {
+                caloriesQuery = KcalRangeCode.KCAL300.query();
+            } else if (KcalRangeCode.KCAL400.equals(requestDTO.getKcalRangeCode())) {
+                caloriesQuery = KcalRangeCode.KCAL400.query();
             }
             query.must(caloriesQuery);
         }
 
+
         //조리시간
-        if(requestDTO.getCookingMinute() > 0) {
-
+        log.info("cookingMinCode: {}", requestDTO.getCookingMinuteRangeCode());
+        if( requestDTO.getCookingMinuteRangeCode() != null ) {
             QueryBuilder cookingMinuteQuery = null;
-
-            if (requestDTO.getCookingMinute() <= 5) {
-                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(0).lte(5);
-            } else if (requestDTO.getCookingMinute() > 5 && requestDTO.getCookingMinute() <= 10) {
-                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(5).lte(10);
-            } else if (requestDTO.getCookingMinute() > 10 && requestDTO.getCookingMinute() <= 20) {
-                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(10).lte(20);
+            if (CookingMinuteRangeCode.M5.equals(requestDTO.getCookingMinuteRangeCode())) {
+                cookingMinuteQuery = CookingMinuteRangeCode.M5.query();
+            } else if (CookingMinuteRangeCode.M10.equals(requestDTO.getCookingMinuteRangeCode())) {
+                cookingMinuteQuery = CookingMinuteRangeCode.M20.query();
+            } else if (CookingMinuteRangeCode.M20.equals(requestDTO.getCookingMinuteRangeCode())) {
+                cookingMinuteQuery = CookingMinuteRangeCode.M20.query();
             }
             query.must(cookingMinuteQuery);
         }
+
+//        if(requestDTO.getCookingMinute() > 0) {
+//
+//            //QueryBuilder cookingMinuteQuery = null;
+//
+//            if (requestDTO.getCookingMinute() <= 5) {
+//                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(0).lte(5);
+//            } else if (requestDTO.getCookingMinute() > 5 && requestDTO.getCookingMinute() <= 10) {
+//                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(5).lte(10);
+//            } else if (requestDTO.getCookingMinute() > 10 && requestDTO.getCookingMinute() <= 20) {
+//                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(10).lte(20);
+//            }
+//            query.must(cookingMinuteQuery);
+//        }
 
         SearchSourceBuilder sourceQuery = sourceQuery(requestDTO);
         sourceQuery.query(query);

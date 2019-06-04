@@ -1,8 +1,11 @@
 package com.pulmuone.demo.api.search.dto;
+import com.pulmuone.demo.api.search.domain.CookingMinuteRangeCode;
+import com.pulmuone.demo.api.search.domain.KcalRangeCode;
 import com.pulmuone.demo.api.search.domain.SortCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 
 /**
  * 상품 검색 Request DTO
@@ -16,12 +19,11 @@ public class SearchRequestDTO {
     private String keyword;
 
     /** filter */
-    private Integer kcal;
-    private Integer cookingMinute;
     private String ingredients;
     private String preferredFood;
     private String excludedFoodIngredients;
-
+    private CookingMinuteRangeCode cookingMinuteRangeCode;
+    private KcalRangeCode kcalRangeCode;
 
     /** sort code : default = new */
     private SortCode sortCode = SortCode.NEW;
