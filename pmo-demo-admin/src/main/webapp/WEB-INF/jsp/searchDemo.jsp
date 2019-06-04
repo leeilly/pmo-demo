@@ -187,7 +187,7 @@
             ,type: 'GET'
             , contentType:"application/json; charset=UTF-8"
             , success: function (result) {
-                console.log(result);
+                //console.log(result);
 
                 $('#search-result-list').html('');
 
