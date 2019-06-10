@@ -63,7 +63,10 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">상품명</th>
-                    <th scope="col">점수</th>
+                    <th scope="col">카테고리번호</th>
+                    <th scope="col">카테고리명</th>
+                    <th scope="col">카테고리부스팅점수</th>
+                    <th scope="col">인기도점수</th>
                     <th scope="col">kcal</th>
                     <th scope="col">조리시간</th>
                     <th scope="col">성분</th>
@@ -105,6 +108,9 @@
                     html += '<tr>' +
                         '<th scope="row">'+item.productSeq+'</th>' +
                         '<td>' + item.name + '</td>' +
+                        '<td>' + item.categorySeq + '</td>' +
+                        '<td>' + item.categoryName + '</td>' +
+                        '<td></td>' +
                         '<td>' + item.score + '</td>' +
                         '<td>' + item.kcal + '</td>' +
                         '<td>' + item.cookingMinute + '</td>' +
