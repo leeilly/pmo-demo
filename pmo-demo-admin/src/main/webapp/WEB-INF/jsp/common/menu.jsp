@@ -31,7 +31,7 @@
             <li><a href="/search-demo">검색 결과 확인</a></li>
             <li><a href="/analyze">형태소 분석 확인</a></li>
             <li><a href="/manage-score">점수 조정</a></li>
-            <li><a href="/dictionary">사용자정 사전 관리</a></li>
+            <li><a href="/dictionary">사용자 정의 사전 관리</a></li>
         </ul>
     </div><!--/.nav-collapse -->
 </nav>

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Map;
+
 
 /**
  * 상품 검색 Request DTO
@@ -31,5 +33,10 @@ public class SearchRequestDTO {
     /** paging */
     private Integer page = 1;
     private Integer limit = 30;
+
+    private Integer boostCategorySeq;
+    private Integer boostCategoryScore;
+
+    private Map<Integer, Integer> categoryBoostingMap;
 
 }

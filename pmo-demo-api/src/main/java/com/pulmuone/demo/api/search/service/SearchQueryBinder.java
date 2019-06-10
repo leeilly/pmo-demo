@@ -2,10 +2,10 @@ package com.pulmuone.demo.api.search.service;
 
 import com.pulmuone.demo.api.search.domain.CookingMinuteRangeCode;
 import com.pulmuone.demo.api.search.domain.KcalRangeCode;
-import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
-import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import com.pulmuone.demo.api.search.domain.SortCode;
 import com.pulmuone.demo.api.search.dto.SearchRequestDTO;
+import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
+import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -13,8 +13,16 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Iterator;
+
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
+
 
 
 @Slf4j
@@ -115,6 +123,9 @@ public class SearchQueryBinder {
             throw new Exception("[Search Exception] Search keyword must not be null.");
         }
 
+
+
+
         //fixme: 관리필요함.
         String[] keywordIndexFields = new String[]{
                 "name"
@@ -126,15 +137,21 @@ public class SearchQueryBinder {
         QueryBuilder multiKeywordQuery = QueryBuilders.multiMatchQuery(requestDTO.getKeyword(),keywordIndexFields).operator(Operator.AND);
         query.must(multiKeywordQuery);
 
+        //카테고리 부스팅
+        for( Integer categoreSeq : requestDTO.getCategoryBoostingMap().keySet() ){
+            QueryBuilder boostQuery = QueryBuilders.matchQuery("category_seq", categoreSeq ).operator(Operator.AND).boost(requestDTO.getCategoryBoostingMap().get(categoreSeq));
+            query.should(boostQuery);
+        }
+
         //선호 식품 필터
         if(StringUtils.isNotBlank(requestDTO.getPreferredFood())) {
-            QueryBuilder preferredFoodQuery = QueryBuilders.matchQuery("ingredients", requestDTO.getPreferredFood()).operator(Operator.AND);
+            QueryBuilder preferredFoodQuery = matchQuery("ingredients", requestDTO.getPreferredFood()).operator(Operator.AND);
             query.must(preferredFoodQuery);
         }
 
         //알레르기 유발 식품 제외
         if(StringUtils.isNotBlank(requestDTO.getExcludedFoodIngredients())) {
-            QueryBuilder excludedFoodIngredientsQuery = QueryBuilders.matchQuery("ingredients", requestDTO.getExcludedFoodIngredients()).operator(Operator.OR);
+            QueryBuilder excludedFoodIngredientsQuery = matchQuery("ingredients", requestDTO.getExcludedFoodIngredients()).operator(Operator.OR);
             query.mustNot(excludedFoodIngredientsQuery);
         }
 
@@ -167,20 +184,6 @@ public class SearchQueryBinder {
             query.must(cookingMinuteQuery);
         }
 
-//        if(requestDTO.getCookingMinute() > 0) {
-//
-//            //QueryBuilder cookingMinuteQuery = null;
-//
-//            if (requestDTO.getCookingMinute() <= 5) {
-//                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(0).lte(5);
-//            } else if (requestDTO.getCookingMinute() > 5 && requestDTO.getCookingMinute() <= 10) {
-//                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(5).lte(10);
-//            } else if (requestDTO.getCookingMinute() > 10 && requestDTO.getCookingMinute() <= 20) {
-//                cookingMinuteQuery = QueryBuilders.rangeQuery("cooking_minute").gte(10).lte(20);
-//            }
-//            query.must(cookingMinuteQuery);
-//        }
-
         SearchSourceBuilder sourceQuery = sourceQuery(requestDTO);
         sourceQuery.query(query);
 
@@ -192,7 +195,7 @@ public class SearchQueryBinder {
 
         //Sort
         SortCode sortCode = requestDTO.getSortCode();
-        sourceQuery.sort(sortCode.field(), sortCode.order());
+        sourceQuery.sort("_score", SortOrder.DESC);
         sourceQuery.trackScores(true);
 
         //Paging
@@ -231,4 +234,19 @@ public class SearchQueryBinder {
     }
 
 
+    public SearchSourceBuilder boostCategorySearchQuery(SearchRequestDTO requestDTO) {
+        BoolQueryBuilder query = QueryBuilders.boolQuery();
+        QueryBuilder keywordQuery = matchQuery("keyword", requestDTO.getKeyword()).operator(Operator.AND);
+        query.must(keywordQuery);
+
+        SearchSourceBuilder sourceQuery = new SearchSourceBuilder();
+        sourceQuery.query(query);
+
+        //log.info("boost query: {}", query);
+
+        return sourceQuery;
+
+
+
+    }
 }

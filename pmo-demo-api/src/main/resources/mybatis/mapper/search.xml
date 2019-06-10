@@ -28,4 +28,14 @@
         FROM product
     </select>
 
+    <select id="selectBoostIndexTargetList" resultType="com.pulmuone.demo.api.search.domain.BoostDocumentDomain">
+        SELECT /* id=selectBoostIndexTargetList */
+            boost_seq
+            , keyword
+            , category_seq
+            , score
+            , create_ymdt
+        FROM search_boost_map
+    </select>
+
 </mapper>

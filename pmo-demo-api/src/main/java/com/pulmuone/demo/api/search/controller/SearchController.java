@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -42,10 +44,11 @@ public class SearchController {
             @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
 
         if(StringUtils.isBlank(keyword)) {
-            throw new Exception("Search keyword must not be null.");
+            return ResponseEntity.ok(ApiResult.ok(new SearchResult()));
         }
 
         SearchRequestDTO dto = new SearchRequestDTO();
+        dto.setBoostCategorySeq(1);
         dto.setKeyword(keyword);
         dto.setPage(pageNumber);
         dto.setLimit(limit);
@@ -71,12 +74,14 @@ public class SearchController {
             dto.setKcalRangeCode(KcalRangeCode.valueOf(kcalRangeCode));
         }
 
+        dto.setCategoryBoostingMap(boostCategorySearch(keyword));
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.query(dto);
         log.info("query= {}", query.toString());
 
         SearchResult searchResult = elasticSearchService.search(query, ProductDocumentDomain.class);
+
 
         List<ProductDocumentDomain> list = searchResult.getSearchResult();
         searchResult.setSearchResult(list);
@@ -103,7 +108,7 @@ public class SearchController {
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.autoCompleteQuery(dto);
-        log.info("query= {}", query.toString());
+        //log.info("query= {}", query.toString());
 
         SearchResult searchResult = elasticSearchService.searchAutoComplete(query, ProductAutoCompleteResultDomain.class);
 
@@ -111,6 +116,29 @@ public class SearchController {
         searchResult.setSearchResult(list);
 
         return ResponseEntity.ok(ApiResult.ok(searchResult));
+    }
+
+
+    public Map<Integer, Integer> boostCategorySearch(String keyword) throws Exception {
+
+        SearchRequestDTO dto = new SearchRequestDTO();
+        dto.setKeyword(keyword);
+
+        SearchQueryBinder queryBinder = new SearchQueryBinder();
+        SearchSourceBuilder query = queryBinder.boostCategorySearchQuery(dto);
+        //log.info("boost query= {}", query.toString());
+
+        SearchResult searchResult = elasticSearchService.boostCategorySearch(query, BoostDocumentDomain.class);
+
+        Map<Integer, Integer> boostingMap = new HashMap<Integer, Integer>();
+        List<BoostDocumentDomain> list = searchResult.getSearchResult();
+        list.stream().forEach(
+                b -> {
+                    //log.info("category boost: {}, score: {}", b.getCategorySeq(), b.getScore());
+                    boostingMap.put(b.getCategorySeq(), b.getScore());
+                }
+        );
+        return boostingMap;
     }
 
 

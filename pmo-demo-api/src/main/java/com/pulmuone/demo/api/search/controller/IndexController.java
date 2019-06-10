@@ -32,6 +32,8 @@ public class IndexController {
             elasticSearchService.createIndex(indexName);
         }else if( "product_ac".equals(indexName) ){
             elasticSearchService.createAutoCompleteIndex(indexName);
+        }else if( "boost".equals(indexName) ){
+            elasticSearchService.createBoostIndex(indexName);
         }
     }
 

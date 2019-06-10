@@ -15,4 +15,11 @@ public class SearchAdminController {
     public String searchDemo(){
         return "searchDemo";
     }
+
+
+    @RequestMapping("/analyze")
+    public String analyze(){
+        return "analyze";
+    }
+
 }

@@ -3,12 +3,9 @@ package com.pulmuone.demo.api.search.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.pulmuone.demo.api.search.domain.AnalyzeResultDomain;
+import com.pulmuone.demo.api.search.domain.*;
 import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
 import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
-import com.pulmuone.demo.api.search.domain.ProductAutoCompleteDomain;
-import com.pulmuone.demo.api.search.domain.ProductDocumentDomain;
-import com.pulmuone.demo.api.search.domain.SearchResult;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequest;
@@ -43,11 +40,14 @@ public class ElasticSearchService<T> {
 
 
     private static final String INDEX_ALIAS_NAME = "product";
+    private static final String BOOST_INDEX_ALIAS_NAME = "boost";
     private static final String AC_INDEX_ALIAS_NAME = "product_ac";
 
     private static final ObjectMapper MAPPER = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public SearchResult<T> search(SearchSourceBuilder query, Class<T> valueType) throws Exception {
+
+
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.indices(INDEX_ALIAS_NAME);
         searchRequest.source(query);
@@ -174,4 +174,31 @@ public class ElasticSearchService<T> {
         return list;
 
     }
+
+    public void createBoostIndex(String indexName) throws IOException {
+
+        List<BoostDocumentDomain> list = searchIndexMapper.selectBoostIndexTargetList();
+
+        BulkRequest request = new BulkRequest();
+        list.stream().forEach(data -> request.add(createIndexRequest(indexName, MAPPER.convertValue((Object) data, Map.class))));
+        BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
+
+        log.info("boost insert done. total: {}", response.getItems().length);
+    }
+
+    public SearchResult<T> boostCategorySearch(SearchSourceBuilder query, Class<T> valueType) throws Exception {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(BOOST_INDEX_ALIAS_NAME);
+        searchRequest.source(query);
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        log.info("searchResponse.getHits(): {}", searchResponse.getHits()) ;
+
+        SearchResult result = new SearchResult();
+        result.setCount(searchResponse.getHits().getTotalHits().value);
+        result.setSearchResult(convertResultList(searchResponse, valueType));
+
+        return result;
+    }
+
 }
