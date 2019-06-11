@@ -22,4 +22,9 @@ public class SearchAdminController {
         return "analyze";
     }
 
+    @RequestMapping("/boosting")
+    public String boosting(){
+        return "boosting";
+    }
+
 }
