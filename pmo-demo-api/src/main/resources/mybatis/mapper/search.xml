@@ -34,7 +34,7 @@
             , keyword
             , category_seq
             , score
-            , create_ymdt
+            , modified_ymdt
         FROM search_boost_map
     </select>
 

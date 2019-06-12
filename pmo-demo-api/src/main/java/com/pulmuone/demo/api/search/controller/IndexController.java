@@ -24,17 +24,20 @@ public class IndexController {
     @Autowired
     ElasticSearchService elasticSearchService;
 
-    @ApiOperation(value = "상품색인", notes = "elasticsearch 상품 색인")
-    @RequestMapping(value = "/product", method = RequestMethod.GET)
-    public void indexProduct( @ApiParam("인덱스명") @RequestParam(value = "indexName", required = true) String indexName) throws Exception {
+    @ApiOperation(value = "전체 색인", notes = "elasticsearch 전체 색인")
+    @RequestMapping(value = "/bulk", method = RequestMethod.GET)
+    public void indexProduct( @ApiParam("인덱스 type: 상품=product / 자동완성=ac / 카테고리부스팅=boost") @RequestParam(value = "type", required = true) String type) throws Exception {
 
-        if( "product".equals(indexName) || "test".equals(indexName) ) {
-            elasticSearchService.createIndex(indexName);
-        }else if( "product_ac".equals(indexName) ){
-            elasticSearchService.createAutoCompleteIndex(indexName);
-        }else if( "boost".equals(indexName) ){
-            elasticSearchService.createBoostIndex(indexName);
-        }
+        log.info("type: {}", type);
+        elasticSearchService.bulkIndex(type);
+
+//        if( "product".equals(type) || "test".equals(type) ) {
+//            elasticSearchService.createIndex();
+//        }else if( "ac".equals(type) ){
+//            elasticSearchService.createAutoCompleteIndex();
+//        }else if( "boost".equals(type) ){
+//            elasticSearchService.createBoostIndex();
+//        }
     }
 
     @ApiOperation(value = "형태소분석", notes = "elasticsearch 형태소 분석")
@@ -42,17 +45,7 @@ public class IndexController {
     public ResponseEntity<ApiResult<List<AnalyzeResultDomain>>> analyze(@ApiParam("키워드") @RequestParam(value = "keyword", required = true) String keyword
             , @ApiParam("analyzer 이름") @RequestParam(value = "analyzerName", required = true, defaultValue = "my_analyzer") String analyzerName
     ){
-
         List<AnalyzeResultDomain> termList = elasticSearchService.analyze(keyword, analyzerName);
-        termList.stream().forEach(t -> {
-            log.info("term: {}, type: {}", t.getTerm(), t.getType());
-
-        });
-
         return ResponseEntity.ok(ApiResult.ok(termList));
-
     }
-
-
-
 }

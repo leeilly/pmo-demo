@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class SearchAdminController {
-
     @RequestMapping("/")
     public String index(){
         return "index";
@@ -26,5 +25,7 @@ public class SearchAdminController {
     public String boosting(){
         return "boosting";
     }
+
+
 
 }

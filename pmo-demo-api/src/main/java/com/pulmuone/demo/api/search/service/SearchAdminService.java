@@ -1,6 +1,7 @@
 package com.pulmuone.demo.api.search.service;
 
 import com.pulmuone.demo.api.search.domain.CategoryBoostDomain;
+import com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO;
 import com.pulmuone.demo.api.search.mapper.SearchAdminMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,9 @@ public class SearchAdminService {
         log.info("keyword: {}", keyword);
 
         return searchAdminMapper.selectCategoryBoostList(keyword);
+    }
+
+    public int updateCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO) {
+        return searchAdminMapper.updateCategoryBoostScore(categoryBoostScoreDTO);
     }
 }

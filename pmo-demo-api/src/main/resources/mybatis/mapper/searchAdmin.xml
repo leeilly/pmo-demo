@@ -12,4 +12,10 @@
         FROM search_boost_map WHERE keyword = #{keyword}
     </select>
 
+    <update id="updateCategoryBoostScore" parameterType="com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO">
+        UPDATE search_boost_map
+        SET score = #{score}
+        WHERE boost_seq = #{boostSeq}
+    </update>
+
 </mapper>

@@ -64,12 +64,10 @@ public class SearchController {
         }
 
         if(StringUtils.isNotBlank(cookingMinuteRangeCode)) {
-            log.info("cookingMinute: {}", cookingMinuteRangeCode );
             dto.setCookingMinuteRangeCode(CookingMinuteRangeCode.valueOf(cookingMinuteRangeCode));
         }
 
         if(StringUtils.isNotBlank(kcalRangeCode)) {
-            log.info("kcalRangeCode: {}", kcalRangeCode );
             dto.setKcalRangeCode(KcalRangeCode.valueOf(kcalRangeCode));
         }
 
@@ -77,7 +75,6 @@ public class SearchController {
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.query(dto);
-        log.info("query= {}", query.toString());
 
         SearchResult searchResult = elasticSearchService.search(query, ProductDocumentDomain.class);
 

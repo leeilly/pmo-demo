@@ -8,6 +8,9 @@ import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
 import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequest;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.admin.indices.analyze.DetailAnalyzeResponse;
@@ -16,6 +19,8 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
+import org.elasticsearch.client.GetAliasesResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.search.SearchHit;
@@ -24,7 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,28 +46,12 @@ public class ElasticSearchService<T> {
     SearchIndexMapper searchIndexMapper;
 
 
-    private static final String INDEX_ALIAS_NAME = "product";
-    private static final String BOOST_INDEX_ALIAS_NAME = "boost";
-    private static final String AC_INDEX_ALIAS_NAME = "product_ac";
+    private static final String PRODUCT_INDEX_ALIAS = "product";
+    private static final String CATEGORY_BOOST_INDEX_ALIAS= "category_boost";
+    private static final String AC_INDEX_ALIAS = "ac";
 
     private static final ObjectMapper MAPPER = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    public SearchResult<T> search(SearchSourceBuilder query, Class<T> valueType) throws Exception {
-
-
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices(INDEX_ALIAS_NAME);
-        searchRequest.source(query);
-        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-
-        log.info("searchResponse.getHits(): {}", searchResponse.getHits()) ;
-
-        SearchResult result = new SearchResult();
-        result.setCount(searchResponse.getHits().getTotalHits().value);
-        result.setSearchResult(convertResultList(searchResponse, valueType));
-
-        return result;
-    }
 
 
     public static <T> List<T> convertResultList(SearchResponse response, Class<T> valueType) throws IllegalArgumentException, IOException {
@@ -81,114 +72,10 @@ public class ElasticSearchService<T> {
         return result;
     }
 
+    public SearchResult<T> search(SearchSourceBuilder query, Class<T> valueType) throws Exception {
 
-    //fixme: alias switching
-    public void createIndex(String indexName) throws IOException {
-
-        List<ProductDocumentDomain> list = searchIndexMapper.selectIndexTargetList();
-
-        BulkRequest request = new BulkRequest();
-        list.stream().forEach(data -> request.add(createIndexRequest(indexName, MAPPER.convertValue((Object) data, Map.class))));
-        BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
-
-        log.info("bulk insert done. total: {}", response.getItems().length);
-
-    }
-
-    public IndexRequest createIndexRequest(String indexName, Map<String, Object> data) {
-        IndexRequest request = new IndexRequest(indexName);
-        request.source(data);
-        return request;
-    }
-
-    public void createAutoCompleteIndex(String indexName) {
-        try {
-            KoreanJamoParser jamoParser = new KoreanJamoParser();
-            KoreanChosungParser chosungParser = new KoreanChosungParser();
-            List<ProductAutoCompleteDomain> list = searchIndexMapper.selectAutoCompleteIndexTargetList();
-
-            if (AC_INDEX_ALIAS_NAME.equals(indexName)) {
-                list.forEach(l -> {
-                    l.setNameJamo(jamoParser.parse(l.getName()));
-                    l.setNameChosung(chosungParser.parse(l.getName()));
-                });
-            } else {
-
-                list.forEach(l -> {
-                    l.setNameJamo(jamoParser.parse(l.getName()));
-                    l.setNameChosung(chosungParser.parse(l.getName()));
-                });
-            }
-
-
-            BulkRequest request = new BulkRequest();
-            list.stream().forEach(data -> request.add(createIndexRequest(indexName, MAPPER.convertValue((Object) data, Map.class))));
-            BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
-
-            log.info("bulk insert done. total: {}", response.getItems().length);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
-
-    public SearchResult searchAutoComplete(SearchSourceBuilder query, Class<T> valueType) throws IOException {
         SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices(AC_INDEX_ALIAS_NAME);
-        searchRequest.source(query);
-        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-
-        SearchResult result = new SearchResult();
-        result.setCount(searchResponse.getHits().getTotalHits().value);
-        result.setSearchResult(convertResultList(searchResponse, valueType));
-
-        return result;
-    }
-
-    public List<AnalyzeResultDomain> analyze(String keyword, String analyzerName) {
-
-        List list = new ArrayList();
-
-        AnalyzeRequest analyzeRequest = new AnalyzeRequest();
-        analyzeRequest.index("product");
-        analyzeRequest.text(keyword);
-        analyzeRequest.analyzer(analyzerName);
-        try {
-            AnalyzeResponse response = restHighLevelClient.indices().analyze(analyzeRequest, RequestOptions.DEFAULT);
-            List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
-            DetailAnalyzeResponse detail = response.detail();
-
-            tokens.stream().forEach(t -> {
-                    AnalyzeResultDomain analyzeResultDomain = new AnalyzeResultDomain();
-                    analyzeResultDomain.setTerm(t.getTerm());
-                    analyzeResultDomain.setType(t.getType());
-                    list.add(analyzeResultDomain);
-                }
-            );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return list;
-
-    }
-
-    public void createBoostIndex(String indexName) throws IOException {
-
-        List<BoostDocumentDomain> list = searchIndexMapper.selectBoostIndexTargetList();
-
-        BulkRequest request = new BulkRequest();
-        list.stream().forEach(data -> request.add(createIndexRequest(indexName, MAPPER.convertValue((Object) data, Map.class))));
-        BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
-
-        log.info("boost insert done. total: {}", response.getItems().length);
-    }
-
-    public SearchResult<T> boostCategorySearch(SearchSourceBuilder query, Class<T> valueType) throws Exception {
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices(BOOST_INDEX_ALIAS_NAME);
+        searchRequest.indices(PRODUCT_INDEX_ALIAS);
         searchRequest.source(query);
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
 
@@ -199,6 +86,185 @@ public class ElasticSearchService<T> {
         result.setSearchResult(convertResultList(searchResponse, valueType));
 
         return result;
+    }
+
+
+    public SearchResult searchAutoComplete(SearchSourceBuilder query, Class<T> valueType) throws IOException {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(AC_INDEX_ALIAS);
+        searchRequest.source(query);
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        SearchResult result = new SearchResult();
+        result.setCount(searchResponse.getHits().getTotalHits().value);
+        result.setSearchResult(convertResultList(searchResponse, valueType));
+
+        return result;
+    }
+
+    public SearchResult<T> boostCategorySearch(SearchSourceBuilder query, Class<T> valueType) throws Exception {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(CATEGORY_BOOST_INDEX_ALIAS);
+        searchRequest.source(query);
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        log.info("searchResponse.getHits(): {}", searchResponse.getHits()) ;
+
+        SearchResult result = new SearchResult();
+        result.setCount(searchResponse.getHits().getTotalHits().value);
+        result.setSearchResult(convertResultList(searchResponse, valueType));
+
+        return result;
+    }
+
+    /**
+     * alias switching.
+     * alias: category_boost_dic
+     *
+     * 0) category_boost_dic_20190611 -------> category_boost
+     * 1) create index category_boost_dic_20190612
+     * 2) category_boost_dic_20190611 ---X---> category_boost
+     * 3) category_boost_dic_20190612 -------> category_boost
+     *
+     */
+    public boolean addAlias(String index, String alias) throws IOException {
+
+        IndicesAliasesRequest request = new IndicesAliasesRequest();
+        IndicesAliasesRequest.AliasActions aliasAction =
+                new IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.ADD)
+                        .index(index)
+                        .alias(alias);  //category_boost_dic
+        request.addAliasAction(aliasAction);
+
+        AcknowledgedResponse indicesAliasesResponse = restHighLevelClient.indices().updateAliases(request, RequestOptions.DEFAULT);
+        boolean acknowledged = indicesAliasesResponse.isAcknowledged();
+        log.info("addAlias - alias: {}, index: {}, acknowledged: {}", alias, index,  acknowledged);
+        return acknowledged;
+    }
+
+    public boolean removeAlias(String index, String alias) throws IOException {
+
+        IndicesAliasesRequest request = new IndicesAliasesRequest();
+        IndicesAliasesRequest.AliasActions aliasAction =
+                new IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.REMOVE)
+                        .index(index)
+                        .alias(alias);  //category_boost_dic
+        request.addAliasAction(aliasAction);
+
+        AcknowledgedResponse indicesAliasesResponse = restHighLevelClient.indices().updateAliases(request, RequestOptions.DEFAULT);
+        boolean acknowledged = indicesAliasesResponse.isAcknowledged();
+        log.info("removeAlias - alias: {}, index: {}, acknowledged: {}", alias, index,  acknowledged);
+        return acknowledged;
+    }
+
+    public boolean existAlias(String alias) throws IOException {
+
+        GetAliasesRequest requestWithAlias = new GetAliasesRequest(alias);
+        boolean exists = restHighLevelClient.indices().existsAlias(requestWithAlias, RequestOptions.DEFAULT);
+        log.info("existAlias - alias: {}, exists: {}", alias,  exists);
+        return exists;
+    }
+
+
+    public boolean switchAlias(String newIndex, String alias) throws IOException {
+
+        boolean switched = false;
+        String previousIndex = currentAliasIndex(alias);
+        if(StringUtils.isBlank(previousIndex)) {
+            log.info("alias 에 기 등록된 인덱스가 없습니다.");
+        }
+
+        if( removeAlias(previousIndex, alias) ){
+            addAlias(newIndex, alias);
+            switched = true;
+        }
+        log.info("switchAlias - alias: {}, newIndex: {}, prevIndex: {}, switched: {}", alias, newIndex, previousIndex, switched);
+
+        return switched;
+
+    }
+
+    public String currentAliasIndex(String alias) throws IOException {
+        GetAliasesRequest requestWithAlias = new GetAliasesRequest(alias);
+        GetAliasesResponse response = restHighLevelClient.indices().getAlias(requestWithAlias, RequestOptions.DEFAULT);
+
+        String currentIndex = "";
+        if( response.getAliases().keySet().size() == 1 ){
+            for( String index : response.getAliases().keySet() ){
+                currentIndex = index;
+            }
+        }
+        return currentIndex;
+    }
+
+
+    public IndexRequest createIndexRequest(String indexName, Map<String, Object> data) {
+        IndexRequest request = new IndexRequest(indexName);
+        request.source(data);
+        return request;
+    }
+
+
+    public void bulkIndex(String type) throws IOException {
+
+        List<T> list = null;
+        String alias = "";
+        String newIndex="";
+
+        if( PRODUCT_INDEX_ALIAS.equals(type) ) {
+            newIndex = "product_" + new SimpleDateFormat ( "yyyyMMddHHmm").format(new Date());
+            alias = PRODUCT_INDEX_ALIAS;
+            list = (List<T>) searchIndexMapper.selectIndexTargetList();
+        }else if( "ac".equals(type) ){
+            newIndex = "ac" + new SimpleDateFormat ( "yyyyMMddHHmm").format(new Date());
+            alias = AC_INDEX_ALIAS;
+            list = (List<T>) searchIndexMapper.selectAutoCompleteIndexTargetList();
+        }else if( "boost".equals(type) ){
+            newIndex = "boost" + new SimpleDateFormat ( "yyyyMMddHHmm").format(new Date());
+            alias = CATEGORY_BOOST_INDEX_ALIAS;
+            list = (List<T>) searchIndexMapper.selectBoostIndexTargetList();
+        }
+
+        BulkRequest request = new BulkRequest();
+        String finalNewIndex = newIndex;
+        list.stream().forEach(data -> request.add(createIndexRequest(finalNewIndex, MAPPER.convertValue((Object) data, Map.class))));
+        BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
+
+        //fixme: index 생성되었는지 체크.
+        if(existAlias(alias)){
+            switchAlias(newIndex, alias);
+        }else{
+            addAlias(newIndex, alias);
+        }
+    }
+
+
+    public List<AnalyzeResultDomain> analyze(String keyword, String analyzerName) {
+
+        List list = new ArrayList();
+
+        AnalyzeRequest analyzeRequest = new AnalyzeRequest();
+        analyzeRequest.index(PRODUCT_INDEX_ALIAS);
+        analyzeRequest.text(keyword);
+        analyzeRequest.analyzer(analyzerName);
+        try {
+            AnalyzeResponse response = restHighLevelClient.indices().analyze(analyzeRequest, RequestOptions.DEFAULT);
+            List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
+            DetailAnalyzeResponse detail = response.detail();
+
+            tokens.stream().forEach(t -> {
+                        AnalyzeResultDomain analyzeResultDomain = new AnalyzeResultDomain();
+                        analyzeResultDomain.setTerm(t.getTerm());
+                        analyzeResultDomain.setType(t.getType());
+                        list.add(analyzeResultDomain);
+                    }
+            );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
 }
