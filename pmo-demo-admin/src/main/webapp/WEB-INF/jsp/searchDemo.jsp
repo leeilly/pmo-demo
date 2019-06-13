@@ -12,8 +12,9 @@
 <div class="container">
     <h3>pmo search demo.</h3>
     <div class="input-append">
+        <br/>
         <input class="span2 .search-keyword" id="search-keyword" type="text">
-        <button class="btn search-btn" id="search-btn" type="button">검색</button>
+        <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn">검색</button>
     </div>
 
     <br/>
@@ -25,35 +26,66 @@
 
 
     <div class="form-row">
-        <table>
-            <tr>
-                <th>알레르기 유발 식품 제외: </th>
-                <td> <input type="checkbox" id="ingredients_except_filter_a" value="계란" class="ingredients_except_filter"> 계란 </td>
-                <td> <input type="checkbox" id="ingredients_except_filter_b" value="새우" class="ingredients_except_filter"> 새우 </td>
-                <td> <input type="checkbox" id="ingredients_except_filter_c" value="우유" class="ingredients_except_filter"> 우유 </td>
-            </tr>
-            <tr>
-                <th>칼로리: </th>
-                <td> <input type="radio" id="kcal_filter_ALL" value="" name="kcal_filter" checked> 전체</td>
-                <td> <input type="radio" id="kcal_filter_200" value="KCAL200" name="kcal_filter"> 200kcal</td>
-                <td> <input type="radio" id="kcal_filter_300" value="KCAL300" name="kcal_filter"> 300kcal</td>
-                <td> <input type="radio" id="kcal_filter_400" value="KCAL400" name="kcal_filter"> 400kcal</td>
-            </tr>
-            <tr>
-                <th>조리시간: </th>
-                <td> <input type="radio" id="cooking_min_filter_ALL" value="" name="cooking_min_filter" checked> 전체</td>
-                <td> <input type="radio" id="cooking_min_filter_5" value="M5" name="cooking_min_filter"> 5분 이내</td>
-                <td> <input type="radio" id="cooking_min_filter_10" value=M10" name="cooking_min_filter"> 10분 이내</td>
-                <td> <input type="radio" id="cooking_min_filter_20" value="M20" name="cooking_min_filter"> 20분 이내</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><button class="btn filter-search-btn" type="button">검색</button></td>
-            </tr>
+        <form>
+            <div class="form-group row">
+                <label for="ingredients_except_filter_a" class="col-sm-2 col-form-label">알레르기 유발 식품 제외</label>
+                <div class="col-sm-10">
+                    <input type="checkbox" id="ingredients_except_filter_a" value="계란" class="ingredients_except_filter"> 계란
+                    <input type="checkbox" id="ingredients_except_filter_b" value="새우" class="ingredients_except_filter"> 새우
+                    <input type="checkbox" id="ingredients_except_filter_c" value="우유" class="ingredients_except_filter"> 우유
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="kcal_filter_ALL" class="col-sm-2 col-form-label">칼로리</label>
+                <div class="col-sm-10">
+                    <input type="radio" id="kcal_filter_ALL" value="" name="kcal_filter" checked> 전체
+                    <input type="radio" id="kcal_filter_200" value="KCAL200" name="kcal_filter"> 200kcal
+                    <input type="radio" id="kcal_filter_300" value="KCAL300" name="kcal_filter"> 300kcal
+                    <input type="radio" id="kcal_filter_400" value="KCAL400" name="kcal_filter"> 400kcal
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cooking_min_filter_ALL" class="col-sm-2 col-form-label">조리시간</label>
+                <div class="col-sm-10">
+                    <input type="radio" id="cooking_min_filter_ALL" value="" name="cooking_min_filter" checked> 전체
+                    <input type="radio" id="cooking_min_filter_5" value="M5" name="cooking_min_filter"> 5분 이내
+                    <input type="radio" id="cooking_min_filter_10" value=M10" name="cooking_min_filter"> 10분 이내
+                    <input type="radio" id="cooking_min_filter_20" value="M20" name="cooking_min_filter"> 20분 이내
+                    <button class="btn btn-xs btn-success filter-search-btn" type="button" style="margin-left: 20px;">선택 검색</button>
+                </div>
+            </div>
+        </form>
+
+
+<%--        <table>--%>
+<%--            <tr>--%>
+<%--                <th>알레르기 유발 식품 제외: </th>--%>
+<%--                <td> <input type="checkbox" id="ingredients_except_filter_a" value="계란" class="ingredients_except_filter"> 계란 </td>--%>
+<%--                <td> <input type="checkbox" id="ingredients_except_filter_b" value="새우" class="ingredients_except_filter"> 새우 </td>--%>
+<%--                <td> <input type="checkbox" id="ingredients_except_filter_c" value="우유" class="ingredients_except_filter"> 우유 </td>--%>
+<%--            </tr>--%>
+<%--            <tr>--%>
+<%--                <th>칼로리: </th>--%>
+<%--                <td> <input type="radio" id="kcal_filter_ALL" value="" name="kcal_filter" checked> 전체</td>--%>
+<%--                <td> <input type="radio" id="kcal_filter_200" value="KCAL200" name="kcal_filter"> 200kcal</td>--%>
+<%--                <td> <input type="radio" id="kcal_filter_300" value="KCAL300" name="kcal_filter"> 300kcal</td>--%>
+<%--                <td> <input type="radio" id="kcal_filter_400" value="KCAL400" name="kcal_filter"> 400kcal</td>--%>
+<%--            </tr>--%>
+<%--            <tr>--%>
+<%--                <th>조리시간: </th>--%>
+<%--                <td> <input type="radio" id="cooking_min_filter_ALL" value="" name="cooking_min_filter" checked> 전체</td>--%>
+<%--                <td> <input type="radio" id="cooking_min_filter_5" value="M5" name="cooking_min_filter"> 5분 이내</td>--%>
+<%--                <td> <input type="radio" id="cooking_min_filter_10" value=M10" name="cooking_min_filter"> 10분 이내</td>--%>
+<%--                <td> <input type="radio" id="cooking_min_filter_20" value="M20" name="cooking_min_filter"> 20분 이내</td>--%>
+<%--            </tr>--%>
+<%--            <tr>--%>
+<%--                <td></td>--%>
+<%--                <td></td>--%>
+<%--                <td></td>--%>
+<%--                <td></td>--%>
+<%--                <td></td>--%>
+<%--                <td><button class="btn filter-search-btn" type="button">검색</button></td>--%>
+<%--            </tr>--%>
         </table>
         <br/>
         <br/>
@@ -180,14 +212,6 @@
             param += '&cookingMinuteRangeCode='+cookingMinuteRangeCode;
         }
 
-
-        //console.log(kcalRangeCode);
-        //console.log(exceptIngredients);
-        //console.log(cookingMinuteRangeCode);
-        //console.log(param);
-
-        //var param = '?keyword='+keyword+'&excludedFoodIngredients='+exceptIngredients+'&cookingMin='+cookingMin;
-
         $.ajax({
             url:  'http://localhost:8001/v1/search/product' + param
             ,type: 'GET'
@@ -203,8 +227,11 @@
                     html += '<tr>' +
                         '<th scope="row">'+item.productSeq+'</th>' +
                         '<td>' + item.name + '</td>' +
-                        '<td>' + item.score + '</td>' +
-                        '<td>' + item.kcal + '</td>' +
+                        '<td>' + item.categorySeq + '</td>' +
+                        '<td>' + item.categoryName + '</td>' +
+                        '<td></td>' +
+                        '<td>' + item.score + '</td>'+
+                        '<td>' + item.kcal + '</td>'+
                         '<td>' + item.cookingMinute + '</td>'+
                         '<td>' + item.ingredients + '</td>'+
                         '</tr>';

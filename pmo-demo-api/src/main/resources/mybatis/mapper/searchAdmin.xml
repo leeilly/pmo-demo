@@ -18,4 +18,21 @@
         WHERE boost_seq = #{boostSeq}
     </update>
 
+    <delete id="deleteCategoryBoostScore" parameterType="com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO">
+        DELETE FROM search_boost_map
+        WHERE boost_seq = #{boostSeq}
+    </delete>
+
+    <insert id="insertCategoryBoostScore" parameterType="com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO">
+        INSERT INTO search_boost_map
+        (keyword, category_seq, category_name,  score, modified_ymdt)
+        VALUES(
+            #{keyword}
+            ,#{categorySeq}
+            ,#{categoryName}
+            ,#{score}
+            ,now()
+        )
+    </insert>
+
 </mapper>

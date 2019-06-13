@@ -13,5 +13,6 @@ public interface SearchAdminMapper {
 
     List<CategoryBoostDomain> selectCategoryBoostList(@Param("keyword") String keyword);
     int updateCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO);
-
+    int deleteCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO);
+    int insertCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO);
 }

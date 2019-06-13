@@ -25,4 +25,12 @@ public class SearchAdminService {
     public int updateCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO) {
         return searchAdminMapper.updateCategoryBoostScore(categoryBoostScoreDTO);
     }
+
+    public int deleteCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO) {
+        return searchAdminMapper.deleteCategoryBoostScore(categoryBoostScoreDTO);
+    }
+
+    public int insertCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO) {
+        return searchAdminMapper.insertCategoryBoostScore(categoryBoostScoreDTO);
+    }
 }

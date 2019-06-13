@@ -48,6 +48,24 @@ public class SearchAdminController {
         return ResponseEntity.ok(ApiResult.ok(updatedCount));
     }
 
+    @ApiOperation(value="카테고리 부스팅 항목 삭제", notes = "카테고리 부스팅 항목 삭제")
+    @RequestMapping(value = "/remove-boost", method = RequestMethod.POST)
+    public ResponseEntity<ApiResult<Integer>> removeBoostingScore(@ApiParam("카테고리 부스팅 정보") @RequestBody CategoryBoostScoreDTO categoryBoostScoreDTO) throws Exception {
+
+        int deletedCount = searchAdminService.deleteCategoryBoostScore(categoryBoostScoreDTO);
+
+        return ResponseEntity.ok(ApiResult.ok(deletedCount));
+    }
+
+    @ApiOperation(value="카테고리 부스팅 항목 추가", notes = "카테고리 부스팅 항목 추가")
+    @RequestMapping(value = "/add-boost", method = RequestMethod.POST)
+    public ResponseEntity<ApiResult<Integer>> addBoostingScore(@ApiParam("카테고리 부스팅 정보") @RequestBody CategoryBoostScoreDTO categoryBoostScoreDTO) throws Exception {
+
+        int insertedCount = searchAdminService.insertCategoryBoostScore(categoryBoostScoreDTO);
+
+        return ResponseEntity.ok(ApiResult.ok(insertedCount));
+    }
+
 
     @ApiOperation(value="카테고리 부스팅 엔진 반영", notes = "카테고리 부스팅 엔진 반영")
     @RequestMapping(value = "/apply-boost", method = RequestMethod.GET)

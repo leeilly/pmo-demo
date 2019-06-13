@@ -10,6 +10,7 @@ public class CategoryBoostScoreDTO {
     private Integer boostSeq;
     private String keyword;
     private Integer categorySeq;
+    private String categoryName;
     private Integer score;
 
 }

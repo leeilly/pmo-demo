@@ -104,7 +104,6 @@ public class SearchController {
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.autoCompleteQuery(dto);
-        //log.info("query= {}", query.toString());
 
         SearchResult searchResult = elasticSearchService.searchAutoComplete(query, ProductAutoCompleteResultDomain.class);
 
@@ -122,7 +121,6 @@ public class SearchController {
 
         SearchQueryBinder queryBinder = new SearchQueryBinder();
         SearchSourceBuilder query = queryBinder.boostCategorySearchQuery(dto);
-        //log.info("boost query= {}", query.toString());
 
         SearchResult searchResult = elasticSearchService.boostCategorySearch(query, BoostDocumentDomain.class);
 
@@ -130,7 +128,6 @@ public class SearchController {
         List<BoostDocumentDomain> list = searchResult.getSearchResult();
         list.stream().forEach(
                 b -> {
-                    //log.info("category boost: {}, score: {}", b.getCategorySeq(), b.getScore());
                     boostingMap.put(b.getCategorySeq(), b.getScore());
                 }
         );
