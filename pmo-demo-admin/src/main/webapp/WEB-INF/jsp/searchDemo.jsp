@@ -4,7 +4,8 @@
 <html lang="ko">
 <head>
     <title>pmo search demo</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 부트스트랩 -->
 </head>
 <body>
 <div class="container">
@@ -12,7 +13,7 @@
     <div class="input-append">
         <br/>
         <input class="span2 .search-keyword" id="search-keyword" type="text">
-        <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn" onclick="search();" ontouchend="search()">검색</button>
+        <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn">검색</button>
     </div>
 
     <br/>
@@ -118,13 +119,7 @@
 <script src="/static/js/lib/bootstrap.min.js"></script>
 <script>
 
-    // $('#search-keyword')[0].onkeypress = function(event) {
-    //     if (event.keyCode == 13) {
-    //         $('#search-btn').click();
-    //     }
-    // };
-
-    function search(){
+    $("#search-btn").click(function(){
         var keyword = $("#search-keyword").val();
         //console.log("keyword: " + keyword);
         $.ajax({
@@ -158,44 +153,7 @@
             }
             ,async: false
         });
-    }
-
-    // $('.search-btn').click(function(){
-    // //$("#search-btn").click(function(){
-    //     var keyword = $("#search-keyword").val();
-    //     //console.log("keyword: " + keyword);
-    //     $.ajax({
-    //         url:  'http://localhost:8001/v1/search/product?keyword='+keyword
-    //         ,type: 'GET'
-    //         , contentType:"application/json; charset=UTF-8"
-    //         , success: function (result) {
-    //             //console.log(result);
-    //
-    //             //$('#totalItemCnt').html('');
-    //             $('#search-result-list').html('');
-    //
-    //             //$('#totalItemCnt').append(result.data.count);
-    //             var html = '';
-    //             $.each(result.data.searchResult, function (i, item) {
-    //
-    //                 html += '<tr>' +
-    //                     '<th scope="row">'+item.productSeq+'</th>' +
-    //                     '<td>' + item.name + '</td>' +
-    //                     '<td>' + item.categorySeq + '</td>' +
-    //                     '<td>' + item.categoryName + '</td>' +
-    //                     '<td></td>' +
-    //                     '<td>' + item.score + '</td>' +
-    //                     '<td>' + item.kcal + '</td>' +
-    //                     '<td>' + item.cookingMinute + '</td>' +
-    //                     '<td>' + item.ingredients + '</td>'+
-    //                     '</tr>';
-    //             });
-    //
-    //             $('#search-result-list').append(html);
-    //         }
-    //         ,async: false
-    //     });
-    // });
+    });
 
     $('#search-keyword').keyup(function(){
         var keyword = $(this).val();
