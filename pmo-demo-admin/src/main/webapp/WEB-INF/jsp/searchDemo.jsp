@@ -120,6 +120,12 @@
 <script src="/static/js/lib/bootstrap.min.js"></script>
 <script>
 
+    $('#search-keyword')[0].onkeypress = function(event) {
+        if (event.keyCode == 13) {
+            $('#search-btn').click();
+        }
+    };
+
     $("#search-btn").click(function(){
         var keyword = $("#search-keyword").val();
         //console.log("keyword: " + keyword);

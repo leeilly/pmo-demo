@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/jsp/common/menu.jsp"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -111,8 +112,14 @@
 <script src="/static/js/lib/bootstrap.min.js"></script>
 <script>
 
-    $(document).on('click', '#search-btn', function() {
-    //$("#search-btn").click(function(){
+    $('#search-keyword')[0].onkeypress = function(event) {
+        if (event.keyCode == 13) {
+            $('#search-btn').click();
+        }
+    };
+
+
+    $("#search-btn").click(function(){
         var keyword = $("#search-keyword").val();
         $.ajax({
             url:  'http://localhost:8001/v1/search-admin/boosting-list?keyword='+keyword
