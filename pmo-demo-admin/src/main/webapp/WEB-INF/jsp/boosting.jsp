@@ -112,7 +112,8 @@
 <script src="/static/js/lib/bootstrap.min.js"></script>
 <script>
 
-    $("#search-btn").click(function(){
+    $(document).on('click', '#search-btn', function() {
+    //$("#search-btn").click(function(){
         var keyword = $("#search-keyword").val();
         $.ajax({
             url:  'http://localhost:8001/v1/search-admin/boosting-list?keyword='+keyword
