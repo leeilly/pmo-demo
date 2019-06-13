@@ -115,7 +115,7 @@
     $("#search-btn").click(function(){
         var keyword = $("#search-keyword").val();
         $.ajax({
-            url:  'http://localhost:8001/v1/search-admin/boosting-list?keyword='+keyword
+            url:  'http://13.124.141.46:8001/v1/search-admin/boosting-list?keyword='+keyword
             ,type: 'GET'
             , contentType:"application/json; charset=UTF-8"
             , success: function (result) {
@@ -177,7 +177,7 @@
         categoryBoostScoreDTO.score = $input_score.val();
 
         $.ajax({
-            url:  'http://localhost:8001/v1/search-admin/boost-score'
+            url:  'http://13.124.141.46:8001/v1/search-admin/boost-score'
             ,type: 'POST'
             , contentType:"application/json; charset=UTF-8"
             , data: JSON.stringify(categoryBoostScoreDTO)
@@ -206,7 +206,7 @@
         var categoryBoostScoreDTO = {};
         categoryBoostScoreDTO.boostSeq = boostSeq;
         $.ajax({
-            url:  'http://localhost:8001/v1/search-admin/remove-boost'
+            url:  'http://13.124.141.46:8001/v1/search-admin/remove-boost'
             ,type: 'POST'
             , contentType:"application/json; charset=UTF-8"
             , data: JSON.stringify(categoryBoostScoreDTO)
@@ -223,7 +223,7 @@
 
         if( confirm("부스팅 사전을 검색엔진에 반영하시겠습니까?") ) {
             $.ajax({
-                url: 'http://localhost:8001/v1/search-admin/apply-boost'
+                url: 'http://13.124.141.46:8001/v1/search-admin/apply-boost'
                 , type: 'GET'
                 , contentType: "application/json; charset=UTF-8"
                 , success: function (result) {
@@ -279,7 +279,7 @@
         categoryBoostScoreDTO.categoryName = categoryName;
 
         $.ajax({
-            url: 'http://localhost:8001/v1/search-admin/add-boost'
+            url: 'http://13.124.141.46:8001/v1/search-admin/add-boost'
             , type: 'POST'
             , contentType: "application/json; charset=UTF-8"
             , data: JSON.stringify(categoryBoostScoreDTO)

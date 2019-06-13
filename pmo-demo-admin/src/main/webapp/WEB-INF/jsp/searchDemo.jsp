@@ -6,6 +6,7 @@
     <title>pmo search demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 부트스트랩 -->
+    <link href="/static/css/lib/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <div class="container">
@@ -123,7 +124,7 @@
         var keyword = $("#search-keyword").val();
         //console.log("keyword: " + keyword);
         $.ajax({
-            url:  'http://localhost:8001/v1/search/product?keyword='+keyword
+            url:  'http://13.124.141.46:8001/v1/search/product?keyword='+keyword
             ,type: 'GET'
             , contentType:"application/json; charset=UTF-8"
             , success: function (result) {
@@ -162,7 +163,7 @@
         if( keyword.length <= 0 ) return false;
 
         $.ajax({
-            url:  'http://localhost:8001/v1/search/product/auto_complete?keyword='+keyword
+            url:  'http://13.124.141.46:8001/v1/search/product/auto_complete?keyword='+keyword
             ,type: 'GET'
             , contentType:"application/json; charset=UTF-8"
             , success: function (result) {
@@ -212,7 +213,7 @@
         }
 
         $.ajax({
-            url:  'http://localhost:8001/v1/search/product' + param
+            url:  'http://13.124.141.46:8001/v1/search/product' + param
             ,type: 'GET'
             , contentType:"application/json; charset=UTF-8"
             , success: function (result) {

@@ -64,7 +64,7 @@
         var keyword = $("#keyword").val();
         var analyzerName = $("#analyzer-select option:selected").val();
         $.ajax({
-            url:  'http://localhost:8001/v1/index/analyze?keyword='+keyword +'&analyzerName='+analyzerName
+            url:  'http://13.124.141.46:8001/v1/index/analyze?keyword='+keyword +'&analyzerName='+analyzerName
             ,type: 'GET'
             , contentType:"application/json; charset=UTF-8"
             , success: function (result) {
