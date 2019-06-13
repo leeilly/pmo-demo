@@ -12,7 +12,7 @@
     <div class="input-append">
         <br/>
         <input class="span2 .search-keyword" id="search-keyword" type="text">
-        <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn" onclick="javascript:search();">검색</button>
+        <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn" onclick="search();" ontouchend="search()">검색</button>
     </div>
 
     <br/>
