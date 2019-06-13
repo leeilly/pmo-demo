@@ -110,190 +110,231 @@
 
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="/static/js/lib/bootstrap.min.js"></script>
-<script>
 
-    $("#search-btn").click(function(){
-        var keyword = $("#search-keyword").val();
-        $.ajax({
-            url:  'http://13.124.141.46:8001/v1/search-admin/boosting-list?keyword='+keyword
-            ,type: 'GET'
-            , contentType:"application/json; charset=UTF-8"
-            , success: function (result) {
-                console.log(result);
+<script type="text/javascript">
 
-                if( result.data.length <= 0 ){
-                    alert('해당 키워드로 등록된 카테고리가 없습니다.');
-                    return;
-                }
+    var pmoApp = (function($) {
 
-                $('#search-result-list').html('');
+        'use strict';
 
-                var html = '';
-                $.each(result.data, function (i, item) {
+        return $.extend(true, window.pmoApp || {}, {
 
-                    html += '<tr>' +
-                        '<th scope="row">'+(i+1)+'</th>' +
-                        '<td>' + item.categorySeq + '</td>' +
-                        '<td>' + item.categoryName + '</td>' +
-                        '<td>' +
-                        '   <input type="text" id="score'+ item.boostSeq +'" value='+ item.score +' size="10" readonly="readonly" style="border:none;">' +
-                        '   <span class="glyphicon glyphicon-pencil edit-btn" style="margin-left:20px;" aria-hidden="true" data-boost-seq='+ item.boostSeq +' ></span>' +
-                        '   <span class="glyphicon glyphicon-ok edit-ok-btn" style="margin-left:20px; display:none;" aria-hidden="true" data-boost-seq='+ item.boostSeq +'></span>' +
-                        '</td>'+
-                        '<td>' + item.modifiedYmdt + '</td>' +
-                        '<td><span class="glyphicon glyphicon-remove remove-btn" aria-hidden="true" data-boost-seq='+ item.boostSeq +'></span></td>' +
-                        '</tr>';
+            data : {
+
+            },
+
+            init : function(){
+                var that = this;
+                this.bindSearch();
+                this.bindEditMode();
+                this.bindEdit();
+                this.bindDelete();
+                this.bindApply();
+                this.bindAdd();
+
+            },
+
+            bindSearch : function(){
+                $("#search-btn").click(function(){
+                    var keyword = $("#search-keyword").val().trim();
+                    $.ajax({
+                        url:  'http://13.124.141.46:8001/v1/search-admin/boosting-list?keyword='+keyword
+                        ,type: 'GET'
+                        , contentType:"application/json; charset=UTF-8"
+                        , success: function (result) {
+                            console.log(result);
+
+                            if( result.data.length <= 0 ){
+                                alert('해당 키워드로 등록된 카테고리가 없습니다.');
+                                return;
+                            }
+
+                            $('#search-result-list').html('');
+
+                            var html = '';
+                            $.each(result.data, function (i, item) {
+
+                                html += '<tr>' +
+                                    '<th scope="row">'+(i+1)+'</th>' +
+                                    '<td>' + item.categorySeq + '</td>' +
+                                    '<td>' + item.categoryName + '</td>' +
+                                    '<td>' +
+                                    '   <input type="text" id="score'+ item.boostSeq +'" value='+ item.score +' size="10" readonly="readonly" style="border:none;">' +
+                                    '   <span class="glyphicon glyphicon-pencil edit-btn" style="margin-left:20px;" aria-hidden="true" data-boost-seq='+ item.boostSeq +' ></span>' +
+                                    '   <span class="glyphicon glyphicon-ok edit-ok-btn" style="margin-left:20px; display:none;" aria-hidden="true" data-boost-seq='+ item.boostSeq +'></span>' +
+                                    '</td>'+
+                                    '<td>' + item.modifiedYmdt + '</td>' +
+                                    '<td><span class="glyphicon glyphicon-remove remove-btn" aria-hidden="true" data-boost-seq='+ item.boostSeq +'></span></td>' +
+                                    '</tr>';
+                            });
+
+                            $('#search-result-list').append(html);
+                        }
+                        ,async: false
+                    });
                 });
 
-                $('#search-result-list').append(html);
-            }
-            ,async: false
-        });
-    });
+            },
 
-    $(document).on('click', '.edit-btn', function() {
-        var boostSeq = $(this).data('boostSeq');
-        console.log('edit -  boost_seq: ' + boostSeq );
+            bindEditMode : function(){
+                $(document).on('click', '.edit-btn', function() {
+                    var boostSeq = $(this).data('boostSeq');
+                    console.log('edit -  boost_seq: ' + boostSeq );
 
-        var $input_score = $("#score"+boostSeq);
-        if ($input_score.prop("readonly") == true) {
-            $input_score.prop("readonly", false);
-            $(this).hide();
-            $input_score.closest('td').find(".edit-ok-btn").show();
-            $input_score.focus();
-        }
-
-    });
-
-    $(document).on('click', '.edit-ok-btn', function() {
-
-        var boostSeq = $(this).data('boostSeq');
-        var $input_score = $("#score" + boostSeq);
-        console.log('edit ok - boost_seq: ' + boostSeq);
-
-        /*스코어 점수 업데이트 API*/
-        var categoryBoostScoreDTO = {};
-        categoryBoostScoreDTO.boostSeq = boostSeq;
-        categoryBoostScoreDTO.score = $input_score.val();
-
-        $.ajax({
-            url:  'http://13.124.141.46:8001/v1/search-admin/boost-score'
-            ,type: 'POST'
-            , contentType:"application/json; charset=UTF-8"
-            , data: JSON.stringify(categoryBoostScoreDTO)
-            , success: function (result) {
-                console.log(result);
-                alert('점수가 변경 되었습니다.\n(엔진 반영은 안된 상태)');
-                $input_score.prop("readonly", true);
-                $input_score.closest('td').find(".edit-ok-btn").hide();
-                $input_score.closest('td').find(".edit-btn").show();
-            }
-            ,async: false
-        });
-
-    });
-
-    $(document).on('click', '.remove-btn', function() {
-        var boostSeq = $(this).data('boostSeq');
-        console.log('remove - boost_seq: ' + boostSeq);
-
-        if( !confirm("삭제하시겠습니까?")){
-             return;
-        }
-
-        $(this).closest('tr').remove();
-
-        var categoryBoostScoreDTO = {};
-        categoryBoostScoreDTO.boostSeq = boostSeq;
-        $.ajax({
-            url:  'http://13.124.141.46:8001/v1/search-admin/remove-boost'
-            ,type: 'POST'
-            , contentType:"application/json; charset=UTF-8"
-            , data: JSON.stringify(categoryBoostScoreDTO)
-            , success: function (result) {
-                console.log(result);
-                alert('삭제 되었습니다.\n(엔진 반영은 안된 상태)');
-            }
-            ,async: false
-        });
-    });
-
-    /* 엔진 반영 */
-    $("#apply-btn").click(function(){
-
-        if( confirm("부스팅 사전을 검색엔진에 반영하시겠습니까?") ) {
-            $.ajax({
-                url: 'http://13.124.141.46:8001/v1/search-admin/apply-boost'
-                , type: 'GET'
-                , contentType: "application/json; charset=UTF-8"
-                , success: function (result) {
-                    console.log(result);
-                    if(result.data.code=='0') {
-                        alert('검색엔진에 반영되었습니다.)');
+                    var $input_score = $("#score"+boostSeq);
+                    if ($input_score.prop("readonly") == true) {
+                        $input_score.prop("readonly", false);
+                        $(this).hide();
+                        $input_score.closest('td').find(".edit-ok-btn").show();
+                        $input_score.focus();
                     }
-                }
-                , async: false
-            });
-        }
-    });
 
-    $("#add-btn").click(function(){
-        console.log('lp');
-        $("#boost-keyword").val($("#search-keyword").val());
-        $("#add-modal").modal();
-    });
+                });
+            },
 
-    $("#add-boosting-btn").click(function(){
+            bindEdit : function(){
+                $(document).on('click', '.edit-ok-btn', function() {
 
-        var $keyword = $("#boost-keyword");
-        var $score = $("#boost-score");
+                    var boostSeq = $(this).data('boostSeq');
+                    var $input_score = $("#score" + boostSeq);
+                    console.log('edit ok - boost_seq: ' + boostSeq);
 
-        if( $keyword.val().trim() == '' ){
-            alert('키워드를 입력해주세요.');
-            $keyword.focus();
-            return;
-        }
+                    /*스코어 점수 업데이트 API*/
+                    var categoryBoostScoreDTO = {};
+                    categoryBoostScoreDTO.boostSeq = boostSeq;
+                    categoryBoostScoreDTO.score = $input_score.val();
 
-        var categorySeq = $("#boost-ctgr option:selected").val();
-        var categoryName = $("#boost-ctgr option:selected").text();
-        if(categorySeq == ""){
-            alert('카테고리를 선택해주세요.');
-            $("#boost-ctgr").focus();
-            return;
-        }
+                    $.ajax({
+                        url:  'http://13.124.141.46:8001/v1/search-admin/boost-score'
+                        ,type: 'POST'
+                        , contentType:"application/json; charset=UTF-8"
+                        , data: JSON.stringify(categoryBoostScoreDTO)
+                        , success: function (result) {
+                            console.log(result);
+                            alert('점수가 변경 되었습니다.\n(엔진 반영은 안된 상태)');
+                            $input_score.prop("readonly", true);
+                            $input_score.closest('td').find(".edit-ok-btn").hide();
+                            $input_score.closest('td').find(".edit-btn").show();
+                        }
+                        ,async: false
+                    });
 
-        if( $score.val().trim() == '' ){
-            alert('점수를 입력해주세요.');
-            $score.focus();
-            return;
-        }
+                });
+            },
 
-        if(!confirm('등록하시겠습니끼?')){
-            return;
-        }
+            bindDelete : function(){
+                $(document).on('click', '.remove-btn', function() {
+                    var boostSeq = $(this).data('boostSeq');
+                    console.log('remove - boost_seq: ' + boostSeq);
 
-        var categoryBoostScoreDTO = {};
-        categoryBoostScoreDTO.keyword = $keyword.val().trim();
-        categoryBoostScoreDTO.score = $score.val();
-        categoryBoostScoreDTO.categorySeq = categorySeq;
-        categoryBoostScoreDTO.categoryName = categoryName;
+                    if( !confirm("삭제하시겠습니까?")){
+                        return;
+                    }
 
-        $.ajax({
-            url: 'http://13.124.141.46:8001/v1/search-admin/add-boost'
-            , type: 'POST'
-            , contentType: "application/json; charset=UTF-8"
-            , data: JSON.stringify(categoryBoostScoreDTO)
-            , success: function (result) {
-                console.log(result);
-                alert('등록 되었습니다.\n(엔진 반영은 안된 상태)');
+                    $(this).closest('tr').remove();
+
+                    var categoryBoostScoreDTO = {};
+                    categoryBoostScoreDTO.boostSeq = boostSeq;
+                    $.ajax({
+                        url:  'http://13.124.141.46:8001/v1/search-admin/remove-boost'
+                        ,type: 'POST'
+                        , contentType:"application/json; charset=UTF-8"
+                        , data: JSON.stringify(categoryBoostScoreDTO)
+                        , success: function (result) {
+                            console.log(result);
+                            alert('삭제 되었습니다.\n(엔진 반영은 안된 상태)');
+                        }
+                        ,async: false
+                    });
+                });
+            },
+
+            bindApply : function(){
+
+                /* 엔진 반영 */
+                $("#apply-btn").click(function(){
+
+                    if( confirm("부스팅 사전을 검색엔진에 반영하시겠습니까?") ) {
+                        $.ajax({
+                            url: 'http://13.124.141.46:8001/v1/search-admin/apply-boost'
+                            , type: 'GET'
+                            , contentType: "application/json; charset=UTF-8"
+                            , success: function (result) {
+                                console.log(result);
+                                if(result.data.code=='0') {
+                                    alert('검색엔진에 반영되었습니다.)');
+                                }
+                            }
+                            , async: false
+                        });
+                    }
+                });
+            },
+
+            bindAdd : function(){
+                $("#add-btn").click(function(){
+                    console.log('lp');
+                    $("#boost-keyword").val($("#search-keyword").val());
+                    $("#add-modal").modal();
+                });
+
+                $("#add-boosting-btn").click(function(){
+
+                    var $keyword = $("#boost-keyword");
+                    var $score = $("#boost-score");
+
+                    if( $keyword.val().trim() == '' ){
+                        alert('키워드를 입력해주세요.');
+                        $keyword.focus();
+                        return;
+                    }
+
+                    var categorySeq = $("#boost-ctgr option:selected").val();
+                    var categoryName = $("#boost-ctgr option:selected").text();
+                    if(categorySeq == ""){
+                        alert('카테고리를 선택해주세요.');
+                        $("#boost-ctgr").focus();
+                        return;
+                    }
+
+                    if( $score.val().trim() == '' ){
+                        alert('점수를 입력해주세요.');
+                        $score.focus();
+                        return;
+                    }
+
+                    if(!confirm('등록하시겠습니끼?')){
+                        return;
+                    }
+
+                    var categoryBoostScoreDTO = {};
+                    categoryBoostScoreDTO.keyword = $keyword.val().trim();
+                    categoryBoostScoreDTO.score = $score.val();
+                    categoryBoostScoreDTO.categorySeq = categorySeq;
+                    categoryBoostScoreDTO.categoryName = categoryName;
+
+                    $.ajax({
+                        url: 'http://13.124.141.46:8001/v1/search-admin/add-boost'
+                        , type: 'POST'
+                        , contentType: "application/json; charset=UTF-8"
+                        , data: JSON.stringify(categoryBoostScoreDTO)
+                        , success: function (result) {
+                            console.log(result);
+                            alert('등록 되었습니다.\n(엔진 반영은 안된 상태)');
+                        }
+                        , async: false
+                    });
+
+                    $("#modal-close-btn").click();
+                });
             }
-            , async: false
-        });
+        })
 
-        $("#modal-close-btn").click();
+    })(jQuery);
+
+    $(function(){
+        pmoApp.init();
     });
-
-
 
 </script>
 

@@ -58,34 +58,64 @@
 
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="/static/js/lib/bootstrap.min.js"></script>
-<script>
 
-    $("#analyze-btn").click(function(){
-        var keyword = $("#keyword").val();
-        var analyzerName = $("#analyzer-select option:selected").val();
-        $.ajax({
-            url:  'http://13.124.141.46:8001/v1/index/analyze?keyword='+keyword +'&analyzerName='+analyzerName
-            ,type: 'GET'
-            , contentType:"application/json; charset=UTF-8"
-            , success: function (result) {
-                var html = '';
-                $.each(result.data, function (i, item) {
-                    html += '<tr>' +
-                        '<td scope="row">'+(i+1)+'</td>' +
-                        '<td scope="row">'+item.term+'</td>' +
-                        '</tr>';
+<script type="text/javascript">
+
+    var pmoApp = (function($) {
+
+        'use strict';
+
+        return $.extend(true, window.pmoApp || {}, {
+
+            data : {
+
+            },
+
+            init : function(){
+                var that = this;
+                this.bindAnalyze();
+                this.bindReset();
+
+            },
+
+            bindAnalyze : function(){
+                $("#analyze-btn").click(function(){
+                    var keyword = $("#keyword").val();
+                    var analyzerName = $("#analyzer-select option:selected").val();
+                    $.ajax({
+                        url:  'http://13.124.141.46:8001/v1/index/analyze?keyword='+keyword +'&analyzerName='+analyzerName
+                        ,type: 'GET'
+                        , contentType:"application/json; charset=UTF-8"
+                        , success: function (result) {
+                            var html = '';
+                            $.each(result.data, function (i, item) {
+                                html += '<tr>' +
+                                    '<td scope="row">'+(i+1)+'</td>' +
+                                    '<td scope="row">'+item.term+'</td>' +
+                                    '</tr>';
+                            });
+
+                            $('#analyze-result').append(html);
+                        }
+                        ,async: false
+                    });
                 });
 
-                $('#analyze-result').append(html);
+            },
+
+            bindReset : function(){
+                $("#reset-btn").click(function(){
+                    $('#analyze-result').html('');
+                    $("#keyword").val('');
+
+                });
             }
-            ,async: false
-        });
-    });
+        })
 
-    $("#reset-btn").click(function(){
-        $('#analyze-result').html('');
-        $("#keyword").val('');
+    })(jQuery);
 
+    $(function(){
+        pmoApp.init();
     });
 
 </script>
