@@ -120,135 +120,135 @@
 <script src="/static/js/lib/bootstrap.min.js"></script>
 <script>
 
-    // $('.search-keyword')[0].onkeypress = function(event) {
-    //     if (event.keyCode == 13) {
-    //         $('#search-btn').click();
-    //     }
-    // };
 
-    $(".search-btn").click(function(){
-        var keyword = $("#search-keyword").val();
-        //console.log("keyword: " + keyword);
-        $.ajax({
-            url:  'http://localhost:8001/v1/search/product?keyword='+keyword
-            ,type: 'GET'
-            , contentType:"application/json; charset=UTF-8"
-            , success: function (result) {
-                //console.log(result);
+    $(document).ready(function() {
 
-                //$('#totalItemCnt').html('');
-                $('#search-result-list').html('');
+        $(".search-btn").click(function () {
+            var keyword = $("#search-keyword").val();
+            //console.log("keyword: " + keyword);
+            $.ajax({
+                url: 'http://localhost:8001/v1/search/product?keyword=' + keyword
+                , type: 'GET'
+                , contentType: "application/json; charset=UTF-8"
+                , success: function (result) {
+                    //console.log(result);
 
-                //$('#totalItemCnt').append(result.data.count);
-                var html = '';
-                $.each(result.data.searchResult, function (i, item) {
+                    //$('#totalItemCnt').html('');
+                    $('#search-result-list').html('');
 
-                    html += '<tr>' +
-                        '<th scope="row">'+item.productSeq+'</th>' +
-                        '<td>' + item.name + '</td>' +
-                        '<td>' + item.categorySeq + '</td>' +
-                        '<td>' + item.categoryName + '</td>' +
-                        '<td></td>' +
-                        '<td>' + item.score + '</td>' +
-                        '<td>' + item.kcal + '</td>' +
-                        '<td>' + item.cookingMinute + '</td>' +
-                        '<td>' + item.ingredients + '</td>'+
-                        '</tr>';
-                });
+                    //$('#totalItemCnt').append(result.data.count);
+                    var html = '';
+                    $.each(result.data.searchResult, function (i, item) {
 
-                $('#search-result-list').append(html);
+                        html += '<tr>' +
+                            '<th scope="row">' + item.productSeq + '</th>' +
+                            '<td>' + item.name + '</td>' +
+                            '<td>' + item.categorySeq + '</td>' +
+                            '<td>' + item.categoryName + '</td>' +
+                            '<td></td>' +
+                            '<td>' + item.score + '</td>' +
+                            '<td>' + item.kcal + '</td>' +
+                            '<td>' + item.cookingMinute + '</td>' +
+                            '<td>' + item.ingredients + '</td>' +
+                            '</tr>';
+                    });
+
+                    $('#search-result-list').append(html);
+                }
+                , async: false
+            });
+        });
+
+
+
+        $('.search-keyword').keydown(function () {
+            $('#autocomplete-search-result').text('');
+
+        });
+
+        $('.search-keyword').keyup(function () {
+            var keyword = $(this).val();
+            //console.log('keyword:[' + keyword + ']');
+
+            if (keyword.length <= 0) return false;
+
+            $.ajax({
+                url: 'http://localhost:8001/v1/search/product/auto_complete?keyword=' + keyword
+                , type: 'GET'
+                , contentType: "application/json; charset=UTF-8"
+                , success: function (result) {
+                    //console.log(result.data.searchResult);
+
+                    $.each(result.data.searchResult, function (i, item) {
+                        $('#autocomplete-search-result').append(item.name + " : " + item.score + '<br>');
+                    })
+                }
+                , async: false
+            });
+        });
+
+
+        $('.filter-search-btn').click(function () {
+            var keyword = $('#search-keyword').val();
+            var param = '?keyword=' + keyword;
+
+            //ingredients_except_filter
+            var exceptIngredients = "";
+            $(".ingredients_except_filter:checked").each(function (index) {
+                exceptIngredients += $(this).val() + ",";
+            });
+            if (exceptIngredients.length > 0) {
+                param += '&excludedFoodIngredients=' + exceptIngredients;
             }
-            ,async: false
-        });
-    });
 
-    $('.search-keyword').keyup(function(){
-        var keyword = $(this).val();
-        //console.log('keyword:[' + keyword + ']');
-
-        if( keyword.length <= 0 ) return false;
-
-        $.ajax({
-            url:  'http://localhost:8001/v1/search/product/auto_complete?keyword='+keyword
-            ,type: 'GET'
-            , contentType:"application/json; charset=UTF-8"
-            , success: function (result) {
-                //console.log(result.data.searchResult);
-
-                $.each(result.data.searchResult, function (i, item) {
-                    $('#autocomplete-search-result').append(item.name + " : " + item.score + '<br>');
-                })
+            var kcalRangeCode = "";
+            if ($(":radio[name='kcal_filter']:checked").length > 0 && $(":radio[name='kcal_filter']:checked").val() != "") {
+                kcalRangeCode = $(":radio[name='kcal_filter']:checked").val();
             }
-            ,async: false
-        });
-    });
-
-    $('.search-keyword').keydown(function(){
-        $('#autocomplete-search-result').text('');
-
-    });
-
-
-    $('.filter-search-btn').click(function(){
-        var keyword = $('#search-keyword').val();
-        var param = '?keyword='+keyword;
-
-        //ingredients_except_filter
-        var exceptIngredients = "";
-        $(".ingredients_except_filter:checked").each(function (index) {
-            exceptIngredients += $(this).val() + ",";
-        });
-        if( exceptIngredients.length > 0 ){
-            param += '&excludedFoodIngredients='+exceptIngredients;
-        }
-
-        var kcalRangeCode = "";
-        if( $(":radio[name='kcal_filter']:checked").length > 0 && $(":radio[name='kcal_filter']:checked").val() != ""){
-            kcalRangeCode = $(":radio[name='kcal_filter']:checked").val();
-        }
-        if(kcalRangeCode.length > 0){
-            param += '&kcalRangeCode='+kcalRangeCode;
-        }
-
-        var cookingMinuteRangeCode = "";
-        if( $(":radio[name='cooking_min_filter']:checked").length > 0 && $(":radio[name='cooking_min_filter']:checked").val() != "" ){
-            cookingMinuteRangeCode = $(":radio[name='cooking_min_filter']:checked").val();
-        }
-        if(cookingMinuteRangeCode.length > 0){
-            param += '&cookingMinuteRangeCode='+cookingMinuteRangeCode;
-        }
-
-        $.ajax({
-            url:  'http://localhost:8001/v1/search/product' + param
-            ,type: 'GET'
-            , contentType:"application/json; charset=UTF-8"
-            , success: function (result) {
-                //console.log(result);
-
-                $('#search-result-list').html('');
-
-                var html = '';
-                $.each(result.data.searchResult, function (i, item) {
-
-                    html += '<tr>' +
-                        '<th scope="row">'+item.productSeq+'</th>' +
-                        '<td>' + item.name + '</td>' +
-                        '<td>' + item.categorySeq + '</td>' +
-                        '<td>' + item.categoryName + '</td>' +
-                        '<td></td>' +
-                        '<td>' + item.score + '</td>'+
-                        '<td>' + item.kcal + '</td>'+
-                        '<td>' + item.cookingMinute + '</td>'+
-                        '<td>' + item.ingredients + '</td>'+
-                        '</tr>';
-                });
-
-                $('#search-result-list').append(html);
+            if (kcalRangeCode.length > 0) {
+                param += '&kcalRangeCode=' + kcalRangeCode;
             }
-            ,async: false
+
+            var cookingMinuteRangeCode = "";
+            if ($(":radio[name='cooking_min_filter']:checked").length > 0 && $(":radio[name='cooking_min_filter']:checked").val() != "") {
+                cookingMinuteRangeCode = $(":radio[name='cooking_min_filter']:checked").val();
+            }
+            if (cookingMinuteRangeCode.length > 0) {
+                param += '&cookingMinuteRangeCode=' + cookingMinuteRangeCode;
+            }
+
+            $.ajax({
+                url: 'http://localhost:8001/v1/search/product' + param
+                , type: 'GET'
+                , contentType: "application/json; charset=UTF-8"
+                , success: function (result) {
+                    //console.log(result);
+
+                    $('#search-result-list').html('');
+
+                    var html = '';
+                    $.each(result.data.searchResult, function (i, item) {
+
+                        html += '<tr>' +
+                            '<th scope="row">' + item.productSeq + '</th>' +
+                            '<td>' + item.name + '</td>' +
+                            '<td>' + item.categorySeq + '</td>' +
+                            '<td>' + item.categoryName + '</td>' +
+                            '<td></td>' +
+                            '<td>' + item.score + '</td>' +
+                            '<td>' + item.kcal + '</td>' +
+                            '<td>' + item.cookingMinute + '</td>' +
+                            '<td>' + item.ingredients + '</td>' +
+                            '</tr>';
+                    });
+
+                    $('#search-result-list').append(html);
+                }
+                , async: false
+            });
+
+
         });
-
-
     });
 
 
