@@ -27,7 +27,7 @@
             </div>
             <br/>
 
-            <p style="float:left;"> <button type="button" class="btn btn-sm btn-success" id="add-btn">추가</button></p>
+            <p style="float:left;"> <button type="button" class="btn btn-sm btn-success add-btn" id="add-btn">추가</button></p>
             <p style="float:right; margin-left: 10px;"><button type="button" class="btn btn-sm btn-warning" id="apply-btn"> 엔진반영</button></p>
 <%--            <p style="float:right;"><button type="button" class="btn btn-sm btn-info" id="analyze-btn">저장</button></p>--%>
             <table class="table">
@@ -112,14 +112,8 @@
 <script src="/static/js/lib/bootstrap.min.js"></script>
 <script>
 
-    $('#search-keyword')[0].onkeypress = function(event) {
-        if (event.keyCode == 13) {
-            $('#search-btn').click();
-        }
-    };
 
-
-    $("#search-btn").click(function(){
+    $(".search-btn").click(function(){
         var keyword = $("#search-keyword").val();
         $.ajax({
             url:  'http://localhost:8001/v1/search-admin/boosting-list?keyword='+keyword
@@ -244,7 +238,7 @@
         }
     });
 
-    $("#add-btn").click(function(){
+    $(".add-btn").click(function(){
         $("#boost-keyword").val($("#search-keyword").val());
         $("#add-modal").modal();
     });
