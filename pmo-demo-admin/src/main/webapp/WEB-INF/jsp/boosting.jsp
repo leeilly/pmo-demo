@@ -238,7 +238,6 @@
     });
 
     $("#add-btn").click(function(){
-        console.log('lp');
         $("#boost-keyword").val($("#search-keyword").val());
         $("#add-modal").modal();
     });
