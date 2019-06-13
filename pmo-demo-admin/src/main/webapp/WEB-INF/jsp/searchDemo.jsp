@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 부트스트랩 -->
     <link href="/static/css/lib/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+        .search-btn{
+            cursor:pointer
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -14,7 +19,7 @@
     <div class="input-append">
         <br/>
         <input class="span2 .search-keyword" id="search-keyword" type="text">
-        <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn" style="cursor:pointer">검색</button>
+        <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn">검색</button>
     </div>
 
     <br/>
@@ -126,7 +131,8 @@
         }
     };
 
-    $("#search-btn").click(function(){
+    $('.search-btn').click(function(){
+    //$("#search-btn").click(function(){
         var keyword = $("#search-keyword").val();
         //console.log("keyword: " + keyword);
         $.ajax({
