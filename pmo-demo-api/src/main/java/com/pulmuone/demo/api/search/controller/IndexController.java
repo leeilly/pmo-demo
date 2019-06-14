@@ -30,14 +30,6 @@ public class IndexController {
 
         log.info("type: {}", type);
         elasticSearchService.bulkIndex(type);
-
-//        if( "product".equals(type) || "test".equals(type) ) {
-//            elasticSearchService.createIndex();
-//        }else if( "ac".equals(type) ){
-//            elasticSearchService.createAutoCompleteIndex();
-//        }else if( "boost".equals(type) ){
-//            elasticSearchService.createBoostIndex();
-//        }
     }
 
     @ApiOperation(value = "형태소분석", notes = "elasticsearch 형태소 분석")

@@ -35,4 +35,35 @@
         )
     </insert>
 
+
+    <select id="selectSynonymList" resultType="com.pulmuone.demo.api.search.domain.SynonymDomain">
+        SELECT
+            synonym_seq
+            , synonym
+            , modified_ymdt
+        FROM search_synonym
+        <if test="keyword != null and keyword.length() > 0">
+            WHERE synonym LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+
+    </select>
+
+    <update id="updateSynonym" parameterType="com.pulmuone.demo.api.search.dto.SynonymDTO">
+        UPDATE search_synonym
+        SET synonym = #{synonym}
+        WHERE synonym_seq = #{synonymSeq}
+    </update>
+
+    <insert id="insertSynonym" parameterType="com.pulmuone.demo.api.search.dto.SynonymDTO">
+        INSERT INTO search_synonym
+        (synonym, modified_ymdt)
+        VALUES(
+            #{synonym}
+            ,now()
+        )
+    </insert>
+
+
+
+
 </mapper>

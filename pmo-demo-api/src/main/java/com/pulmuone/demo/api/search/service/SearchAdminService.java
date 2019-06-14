@@ -1,7 +1,9 @@
 package com.pulmuone.demo.api.search.service;
 
 import com.pulmuone.demo.api.search.domain.CategoryBoostDomain;
+import com.pulmuone.demo.api.search.domain.SynonymDomain;
 import com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO;
+import com.pulmuone.demo.api.search.dto.SynonymDTO;
 import com.pulmuone.demo.api.search.mapper.SearchAdminMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +34,17 @@ public class SearchAdminService {
 
     public int insertCategoryBoostScore(CategoryBoostScoreDTO categoryBoostScoreDTO) {
         return searchAdminMapper.insertCategoryBoostScore(categoryBoostScoreDTO);
+    }
+
+    public List<SynonymDomain> getSynonymList(String keyword) {
+        return searchAdminMapper.selectSynonymList(keyword);
+    }
+
+    public int updateSynonym(SynonymDTO synonymDTO) {
+        return searchAdminMapper.updateSynonym(synonymDTO);
+    }
+
+    public int insertSynonym(SynonymDTO synonymDTO) {
+        return searchAdminMapper.insertSynonym(synonymDTO);
     }
 }

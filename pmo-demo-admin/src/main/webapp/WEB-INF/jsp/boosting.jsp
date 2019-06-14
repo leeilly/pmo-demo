@@ -118,6 +118,9 @@
         'use strict';
 
         return $.extend(true, window.pmoApp || {}, {
+            url : {
+                api: '${apiUrl}'
+            },
 
             data : {
 
@@ -135,10 +138,11 @@
             },
 
             bindSearch : function(){
+                var that = this;
                 $("#search-btn").click(function(){
                     var keyword = $("#search-keyword").val().trim();
                     $.ajax({
-                        url:  'http://13.124.141.46:8001/v1/search-admin/boosting-list?keyword='+keyword
+                        url:  that.url.api + '/v1/search-admin/boosting-list?keyword='+keyword
                         ,type: 'GET'
                         , contentType:"application/json; charset=UTF-8"
                         , success: function (result) {
@@ -193,6 +197,7 @@
             },
 
             bindEdit : function(){
+                var that = this;
                 $(document).on('click', '.edit-ok-btn', function() {
 
                     var boostSeq = $(this).data('boostSeq');
@@ -205,7 +210,7 @@
                     categoryBoostScoreDTO.score = $input_score.val();
 
                     $.ajax({
-                        url:  'http://13.124.141.46:8001/v1/search-admin/boost-score'
+                        url:  that.url.api + '/v1/search-admin/boost-score'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(categoryBoostScoreDTO)
@@ -223,6 +228,7 @@
             },
 
             bindDelete : function(){
+                var that = this;
                 $(document).on('click', '.remove-btn', function() {
                     var boostSeq = $(this).data('boostSeq');
                     console.log('remove - boost_seq: ' + boostSeq);
@@ -236,7 +242,7 @@
                     var categoryBoostScoreDTO = {};
                     categoryBoostScoreDTO.boostSeq = boostSeq;
                     $.ajax({
-                        url:  'http://13.124.141.46:8001/v1/search-admin/remove-boost'
+                        url:  that.url.api + '/v1/search-admin/remove-boost'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(categoryBoostScoreDTO)
@@ -250,13 +256,13 @@
             },
 
             bindApply : function(){
-
+                var that = this;
                 /* 엔진 반영 */
                 $("#apply-btn").click(function(){
 
                     if( confirm("부스팅 사전을 검색엔진에 반영하시겠습니까?") ) {
                         $.ajax({
-                            url: 'http://13.124.141.46:8001/v1/search-admin/apply-boost'
+                            url: that.url.api + '/v1/search-admin/apply-boost'
                             , type: 'GET'
                             , contentType: "application/json; charset=UTF-8"
                             , success: function (result) {
@@ -272,6 +278,9 @@
             },
 
             bindAdd : function(){
+
+                var that = this;
+
                 $("#add-btn").click(function(){
                     console.log('lp');
                     $("#boost-keyword").val($("#search-keyword").val());
@@ -314,7 +323,7 @@
                     categoryBoostScoreDTO.categoryName = categoryName;
 
                     $.ajax({
-                        url: 'http://13.124.141.46:8001/v1/search-admin/add-boost'
+                        url: that.url.api + '/v1/search-admin/add-boost'
                         , type: 'POST'
                         , contentType: "application/json; charset=UTF-8"
                         , data: JSON.stringify(categoryBoostScoreDTO)

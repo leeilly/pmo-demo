@@ -3,9 +3,8 @@ package com.pulmuone.demo.api.search.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.pulmuone.demo.api.search.domain.*;
-import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
-import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
+import com.pulmuone.demo.api.search.domain.AnalyzeResultDomain;
+import com.pulmuone.demo.api.search.domain.SearchResult;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -223,6 +222,10 @@ public class ElasticSearchService<T> {
             newIndex = "boost" + new SimpleDateFormat ( "yyyyMMddHHmm").format(new Date());
             alias = CATEGORY_BOOST_INDEX_ALIAS;
             list = (List<T>) searchIndexMapper.selectBoostIndexTargetList();
+        }else if( "test".equals(type) ) {
+            newIndex = "test_" + new SimpleDateFormat ( "yyyyMMddHHmm").format(new Date());
+            alias = "test";
+            list = (List<T>) searchIndexMapper.selectIndexTargetList();
         }
 
         BulkRequest request = new BulkRequest();

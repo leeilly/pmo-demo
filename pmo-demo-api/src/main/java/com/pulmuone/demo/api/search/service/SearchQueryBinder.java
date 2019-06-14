@@ -187,6 +187,8 @@ public class SearchQueryBinder {
         SearchSourceBuilder sourceQuery = sourceQuery(requestDTO);
         sourceQuery.query(query);
 
+        log.info("source query: {}", sourceQuery.toString());
+
         return sourceQuery;
     }
 
@@ -242,7 +244,7 @@ public class SearchQueryBinder {
         SearchSourceBuilder sourceQuery = new SearchSourceBuilder();
         sourceQuery.query(query);
 
-        //log.info("boost query: {}", query);
+        log.info("boost query: {}", query);
 
         return sourceQuery;
 

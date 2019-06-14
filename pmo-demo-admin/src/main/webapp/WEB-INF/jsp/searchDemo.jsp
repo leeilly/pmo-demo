@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+
+
 <%@ include file="/WEB-INF/jsp/common/menu.jsp"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <title>pmo search demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 부트스트랩 -->
 </head>
 <body>
 <div class="container">
@@ -85,23 +88,31 @@ var pmoApp = (function($) {
     'use strict';
 
     return $.extend(true, window.pmoApp || {}, {
+        url : {
+            api: '${apiUrl}'
+        },
 
         data : {
         },
 
         init : function(){
             var that = this;
+            console.log(that.url.api);
+
             this.bindSearch();
             this.bindFilterSearch();
             this.bindAcSearch();
         },
 
         bindSearch : function(){
+            var that = this;
             $("#search-btn").click(function () {
                 var keyword = $("#search-keyword").val();
+
+
                 //console.log("keyword: " + keyword);
                 $.ajax({
-                    url: 'http://13.124.141.46:8001/v1/search/product?keyword=' + keyword
+                    url: that.url.api + '/v1/search/product?keyword=' + keyword
                     , type: 'GET'
                     , contentType: "application/json; charset=UTF-8"
                     , success: function (result) {
@@ -132,6 +143,7 @@ var pmoApp = (function($) {
         },
 
         bindAcSearch : function(){
+            var that = this;
 
             $('#search-keyword').keyup(function(){
                 var keyword = $(this).val();
@@ -139,7 +151,7 @@ var pmoApp = (function($) {
                 if( keyword.length <= 0 ) return false;
 
                 $.ajax({
-                    url:  'http://13.124.141.46:8001/v1/search/product/auto_complete?keyword='+keyword
+                    url:  that.url.api + '/v1/search/product/auto_complete?keyword='+keyword
                     ,type: 'GET'
                     , contentType:"application/json; charset=UTF-8"
                     , success: function (result) {
@@ -160,6 +172,7 @@ var pmoApp = (function($) {
         },
 
         bindFilterSearch : function(){
+            var that = this;
             $('.filter-search-btn').click(function () {
                 var keyword = $('#search-keyword').val();
                 var param = '?keyword=' + keyword;
@@ -190,7 +203,7 @@ var pmoApp = (function($) {
                 }
 
                 $.ajax({
-                    url: 'http://13.124.141.46:8001/v1/search/product' + param
+                    url: that.url.api + '/v1/search/product' + param
                     , type: 'GET'
                     , contentType: "application/json; charset=UTF-8"
                     , success: function (result) {
