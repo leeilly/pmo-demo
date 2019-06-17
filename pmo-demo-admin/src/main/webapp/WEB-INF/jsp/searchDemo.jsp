@@ -79,8 +79,8 @@
 </div>
 
 
-<script src="http://code.jquery.com/jquery.js"></script>
-<script src="/static/js/lib/bootstrap.min.js"></script>
+<script src="/static/jquery/jquery.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
 var pmoApp = (function($) {
