@@ -20,4 +20,7 @@ public interface SearchAdminMapper {
     List<SynonymDomain> selectSynonymList(@Param("keyword") String keyword);
     int updateSynonym(SynonymDTO synonymDTO);
     int insertSynonym(SynonymDTO synonymDTO);
+    int deleteSynonym(SynonymDTO synonymDTO);
+
+    List<SynonymDomain>  selectAllSynonymList();
 }

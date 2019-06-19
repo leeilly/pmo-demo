@@ -14,7 +14,7 @@ public class ElasticsearchProperty {
 
     @Value("${pmo.elasticsearch.host}")
     private String host;
+    @Value("${pmo.elasticsearch.port}")
     private int port;
-    private String alias;
 
 }

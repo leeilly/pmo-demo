@@ -20,6 +20,7 @@
                     <select class="form-control" id="analyzer-select">
                         <option value="my_analyzer" selected>nori</option>
                         <option value="ngram_analyzer">ngram</option>
+                        <option value="edge_ngram_analyzer">edge_ngram</option>
                     </select>
                 </td>
             </tr>

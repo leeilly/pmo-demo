@@ -102,11 +102,12 @@
 
             init : function(){
                 var that = this;
-                console.log('api domain:['+that.url.api+']');
                 this.bindSearch();
                 this.bindEditMode();
                 this.bindEdit();
                 this.bindAdd();
+                this.bindDelete();
+                this.bindApply();
             },
 
             bindSearch : function(){
@@ -231,6 +232,55 @@
                     });
 
                     $("#modal-close-btn").click();
+                });
+            },
+
+            bindDelete : function(){
+                var that = this;
+                $(document).on('click', '.remove-btn', function() {
+                    var synonymSeq = $(this).data('synonymSeq');
+                    console.log('remove - synonym_seq: ' + synonymSeq);
+
+                    if( !confirm("삭제하시겠습니까?")){
+                        return;
+                    }
+
+                    $(this).closest('tr').remove();
+
+                    var synonymDTO = {};
+                    synonymDTO.synonymSeq = synonymSeq;
+                    $.ajax({
+                        url:  that.url.api + '/v1/search-admin/remove-synonym'
+                        ,type: 'POST'
+                        , contentType:"application/json; charset=UTF-8"
+                        , data: JSON.stringify(synonymDTO)
+                        , success: function (result) {
+                            console.log(result);
+                            alert('삭제 되었습니다.\n(엔진 반영은 안된 상태)');
+                        }
+                        ,async: false
+                    });
+                });
+            },
+
+            bindApply : function(){
+                var that = this;
+                $("#apply-btn").click(function(){
+
+                    if( confirm("동의어 사전을 검색엔진에 반영하시겠습니까?") ) {
+                        $.ajax({
+                            url: that.url.api + '/v1/search-admin/upload-synonym'
+                            , type: 'GET'
+                            , contentType: "application/json; charset=UTF-8"
+                            , success: function (result) {
+                                console.log(result);
+                                if(result.data.code=='0') {
+                                    alert('검색엔진에 반영되었습니다.)');
+                                }
+                            }
+                            , async: false
+                        });
+                    }
                 });
             }
 

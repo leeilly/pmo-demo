@@ -63,7 +63,17 @@
         )
     </insert>
 
+    <delete id="deleteSynonym" parameterType="com.pulmuone.demo.api.search.dto.SynonymDTO">
+        DELETE FROM search_synonym
+        WHERE synonym_seq = #{synonymSeq}
+    </delete>
 
 
-
+    <select id="selectAllSynonymList" resultType="com.pulmuone.demo.api.search.domain.SynonymDomain">
+        SELECT
+        synonym_seq
+        , synonym
+        , modified_ymdt
+        FROM search_synonym
+    </select>
 </mapper>

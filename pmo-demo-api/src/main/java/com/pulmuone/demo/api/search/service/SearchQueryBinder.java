@@ -123,9 +123,6 @@ public class SearchQueryBinder {
             throw new Exception("[Search Exception] Search keyword must not be null.");
         }
 
-
-
-
         //fixme: 관리필요함.
         String[] keywordIndexFields = new String[]{
                 "name"
@@ -141,7 +138,10 @@ public class SearchQueryBinder {
         for( Integer categoreSeq : requestDTO.getCategoryBoostingMap().keySet() ){
             QueryBuilder boostQuery = QueryBuilders.matchQuery("category_seq", categoreSeq ).operator(Operator.AND).boost(requestDTO.getCategoryBoostingMap().get(categoreSeq));
             query.should(boostQuery);
+            log.info("boostQuery: {}", boostQuery);
         }
+
+
 
         //선호 식품 필터
         if(StringUtils.isNotBlank(requestDTO.getPreferredFood())) {

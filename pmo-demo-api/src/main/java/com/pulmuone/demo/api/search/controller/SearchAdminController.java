@@ -27,6 +27,7 @@ public class SearchAdminController {
     @Autowired
     ElasticSearchService elasticSearchService;
 
+
     @ApiOperation(value="카테고리 부스팅 리스트 조회", notes = "키워드별 카테고리 부스팅 리스트 조회")
     @RequestMapping(value = "/boosting-list", method = RequestMethod.GET)
     public ResponseEntity<ApiResult<List<CategoryBoostDomain>>> searchProduct(
@@ -105,5 +106,27 @@ public class SearchAdminController {
 
         return ResponseEntity.ok(ApiResult.ok(insertedCount));
     }
+
+    @ApiOperation(value="동의어 항목 삭제", notes = "동의어 항목 삭제")
+    @RequestMapping(value = "/remove-synonym", method = RequestMethod.POST)
+    public ResponseEntity<ApiResult<Integer>> removeSynonym(@ApiParam("카테고리 부스팅 정보") @RequestBody SynonymDTO synonymDTO) throws Exception {
+
+        int deletedCount = searchAdminService.deleteSynonym(synonymDTO);
+
+        return ResponseEntity.ok(ApiResult.ok(deletedCount));
+    }
+
+
+    @ApiOperation(value="동의어 사진 엔진 반영", notes = "동의어 사전 S3 업로드")
+    @RequestMapping(value = "/upload-synonym", method = RequestMethod.GET)
+    public ResponseEntity<ApiResult<String>> createSynonymDictionary() throws Exception {
+
+        searchAdminService.createSynonymDictionary();
+
+        return ResponseEntity.ok(ApiResult.ok("반영완료"));
+
+    }
+
+
 
 }
