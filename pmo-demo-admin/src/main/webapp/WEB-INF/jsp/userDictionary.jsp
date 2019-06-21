@@ -11,7 +11,13 @@
     <h3>사전 관리</h3>
     <div class="input-append">
         <br/>
-        <h3>동의어 사전</h3>
+        <div>
+            <ul class="nav nav-tabs">
+                <li><a href="/dic/synonym">동의어 사전</a></li>
+                <li class="active"><a href="/dic/user">고유어 사전</a></li>
+                <li><a href="/dic/stop">불용어 사전</a></li>
+            </ul>
+        </div>
         <br/>
         <input class="span2 .search-keyword" id="search-keyword" type="text">
         <button class="btn btn-sm btn-primary search-btn" id="search-btn" type="button">검색</button>
@@ -19,6 +25,9 @@
     <br/>
     <div class="form-row">
         <div>
+            <div class="alert alert-info alert-dismissible" role="info">
+                <p>형태소 분석이 되지 않아야하는 (=쪼개지지 않아야하는) 단어</p>
+            </div>
             <div class="alert alert-warning alert-dismissible" role="alert">
                 <p>변경 내용은 우선 DB에만 반영됩니다. </p>
                 <p>검색결과에 적용하기 위해서는, </p>
@@ -33,7 +42,7 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">동의어</th>
+                    <th scope="col">고유어</th>
                     <th scope="col">수정일시</th>
                     <th scope="col">관리</th>
                 </tr>
@@ -60,19 +69,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title">동의어 사전 항목 추가</h4>
+                <h4 class="modal-title">고유어 사전 항목 추가</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <form role="form">
                         <div class="form-group">
-                            <label for="synonym-keyword">키워드</label> <input type="text" class="form-control" id="synonym-keyword" placeholder="">
+                            <label for="userword-keyword">키워드</label> <input type="text" class="form-control" id="userword-keyword" placeholder="">
                         </div>
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-primary" id="add-synonym-btn">추가</button>
+                <button type="button" class="btn btn-sm btn-primary" id="add-userword-btn">추가</button>
                 <button type="button" class="btn btn-sm btn-default" id="modal-close-btn" data-dismiss="modal">닫기</button>
             </div>
         </div>
@@ -95,7 +104,7 @@
         return $.extend(true, window.pmoApp || {}, {
 
             url : {
-              api: '${apiUrl}'
+                api: '${apiUrl}'
             },
             data : {
             },
@@ -114,7 +123,7 @@
                 var that = this;
                 $("#search-btn").click(function(){
 
-                    var url = that.url.api + '/v1/search-admin/synonym-list';
+                    var url = that.url.api + '/v1/search-admin/userword-list';
                     var keyword = $("#search-keyword").val().trim();
                     if( keyword != '' ){
                         url = url + '?keyword='+keyword;
@@ -135,12 +144,12 @@
                                 html += '<tr>' +
                                     '<th scope="row">'+(i+1)+'</th>' +
                                     '<td>' +
-                                    '   <input type="text" id="synonym'+ item.synonymSeq +'" value='+ item.synonym +' readonly="readonly" style="border:none;">' +
-                                    '   <span class="glyphicon glyphicon-pencil edit-btn" style="margin-left:20px;" aria-hidden="true" data-synonym-seq='+ item.synonymSeq +' ></span>' +
-                                    '   <span class="glyphicon glyphicon-ok edit-ok-btn" style="margin-left:20px; display:none;" aria-hidden="true" data-synonym-seq='+ item.synonymSeq +'></span>' +
+                                    '   <input type="text" id="userword'+ item.userWord +'" value='+ item.userWord +' readonly="readonly" style="border:none;">' +
+                                    '   <span class="glyphicon glyphicon-pencil edit-btn" style="margin-left:20px;" aria-hidden="true" data-user-word-seq='+ item.userWordSeq +' ></span>' +
+                                    '   <span class="glyphicon glyphicon-ok edit-ok-btn" style="margin-left:20px; display:none;" aria-hidden="true" data-user-word-seq='+ item.userWordSeq +'></span>' +
                                     '</td>'+
                                     '<td>' + item.modifiedYmdt + '</td>' +
-                                    '<td><span class="glyphicon glyphicon-remove remove-btn" aria-hidden="true" data-synonym-seq='+ item.synonymSeq +'></span></td>' +
+                                    '<td><span class="glyphicon glyphicon-remove remove-btn" aria-hidden="true" data-user-word-seq='+ item.userWordSeq +'></span></td>' +
                                     '</tr>';
                             });
 
@@ -153,9 +162,9 @@
 
             bindEditMode : function(){
                 $(document).on('click', '.edit-btn', function() {
-                    var synonymSeq = $(this).data('synonymSeq');
-                    console.log('edit -  synonym_seq: ' + synonymSeq );
-                    var $input = $("#synonym"+synonymSeq);
+                    var userWordSeq = $(this).data('userWordSeq');
+                    console.log('edit -  user_word_seq: ' + userWordSeq );
+                    var $input = $("#userword"+userWordSeq);
                     if ($input.prop("readonly") == true) {
                         $input.prop("readonly", false);
                         $(this).hide();
@@ -170,19 +179,19 @@
                 var that = this;
                 $(document).on('click', '.edit-ok-btn', function() {
 
-                    var synonymSeq = $(this).data('synonymSeq');
-                    var $input = $("#synonym" + synonymSeq);
-                    console.log('edit ok - synonym_seq: ' + synonymSeq);
+                    var userWordSeq = $(this).data('userWordSeq');
+                    var $input = $("#userword" + userWordSeq);
+                    console.log('edit ok - userword_seq: ' + userWordSeq);
 
-                    var synonymDTO = {};
-                    synonymDTO.synonymSeq = synonymSeq;
-                    synonymDTO.synonym = $input.val();
+                    var userWordDTO = {};
+                    userWordDTO.userWordSeq = userWordSeq;
+                    userWordDTO.userWord = $input.val();
 
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/synonym-edit'
+                        url:  that.url.api + '/v1/search-admin/edit-userword'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
-                        , data: JSON.stringify(synonymDTO)
+                        , data: JSON.stringify(userWordDTO)
                         , success: function (result) {
                             console.log(result);
                             alert('변경 되었습니다.\n(엔진 반영은 안된 상태)');
@@ -202,12 +211,12 @@
                     $("#add-modal").modal();
                 });
 
-                $("#add-synonym-btn").click(function () {
+                $("#add-userword-btn").click(function () {
 
-                    var $keyword = $("#synonym-keyword");
+                    var $keyword = $("#userword-keyword");
 
                     if ($keyword.val().trim() == '') {
-                        alert('동의어를 입력해주세요.');
+                        alert('고유어를 입력해주세요.');
                         $keyword.focus();
                         return;
                     }
@@ -216,14 +225,14 @@
                         return;
                     }
 
-                    var synonymDTO = {};
-                    synonymDTO.synonym = $keyword.val().trim();
+                    var userWordDTO = {};
+                    userWordDTO.userWord = $keyword.val().trim();
 
                     $.ajax({
-                        url: that.url.api + '/v1/search-admin/add-synonym'
+                        url: that.url.api + '/v1/search-admin/add-userword'
                         , type: 'POST'
                         , contentType: "application/json; charset=UTF-8"
-                        , data: JSON.stringify(synonymDTO)
+                        , data: JSON.stringify(userWordDTO)
                         , success: function (result) {
                             console.log(result);
                             alert('등록 되었습니다.\n(엔진 반영은 안된 상태)');
@@ -238,8 +247,8 @@
             bindDelete : function(){
                 var that = this;
                 $(document).on('click', '.remove-btn', function() {
-                    var synonymSeq = $(this).data('synonymSeq');
-                    console.log('remove - synonym_seq: ' + synonymSeq);
+                    var userWordSeq = $(this).data('userWordSeq');
+                    console.log('remove - userword_seq: ' + userWordSeq);
 
                     if( !confirm("삭제하시겠습니까?")){
                         return;
@@ -247,13 +256,13 @@
 
                     $(this).closest('tr').remove();
 
-                    var synonymDTO = {};
-                    synonymDTO.synonymSeq = synonymSeq;
+                    var userWordDTO = {};
+                    userWordDTO.userWordSeq = userWordSeq;
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/remove-synonym'
+                        url:  that.url.api + '/v1/search-admin/remove-userword'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
-                        , data: JSON.stringify(synonymDTO)
+                        , data: JSON.stringify(userWordDTO)
                         , success: function (result) {
                             console.log(result);
                             alert('삭제 되었습니다.\n(엔진 반영은 안된 상태)');
@@ -267,9 +276,9 @@
                 var that = this;
                 $("#apply-btn").click(function(){
 
-                    if( confirm("동의어 사전을 검색엔진에 반영하시겠습니까?") ) {
+                    if( confirm("고유어 사전을 검색엔진에 반영하시겠습니까?") ) {
                         $.ajax({
-                            url: that.url.api + '/v1/search-admin/upload-synonym'
+                            url: that.url.api + '/v1/search-admin/upload-userdict'
                             , type: 'GET'
                             , contentType: "application/json; charset=UTF-8"
                             , success: function (result) {

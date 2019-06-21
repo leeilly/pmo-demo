@@ -35,7 +35,6 @@
         )
     </insert>
 
-
     <select id="selectSynonymList" resultType="com.pulmuone.demo.api.search.domain.SynonymDomain">
         SELECT
             synonym_seq
@@ -76,4 +75,47 @@
         , modified_ymdt
         FROM search_synonym
     </select>
+
+
+    <select id="selectUserWordList" resultType="com.pulmuone.demo.api.search.domain.UserDictionaryDomain">
+        SELECT
+        user_word_seq
+        , user_word
+        , modified_ymdt
+        FROM search_user_word
+        <if test="keyword != null and keyword.length() > 0">
+            WHERE user_word LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+
+    </select>
+    <select id="selectAllUserWordList" resultType="com.pulmuone.demo.api.search.domain.UserDictionaryDomain">
+        SELECT
+        user_word_seq
+        , user_word
+        , modified_ymdt
+        FROM search_user_word
+    </select>
+
+    <update id="updateUserWord" parameterType="com.pulmuone.demo.api.search.dto.UserWordDTO">
+        UPDATE user_word_seq
+        SET user_word = #{userWord}
+        WHERE user_word_seq = #{userWordSeq}
+    </update>
+
+    <insert id="insertUserWord" parameterType="com.pulmuone.demo.api.search.dto.UserWordDTO">
+        INSERT INTO search_user_word
+        (user_word, modified_ymdt)
+        VALUES(
+            #{userWord}
+            ,now()
+        )
+    </insert>
+
+
+    <delete id="deleteUserWord" parameterType="com.pulmuone.demo.api.search.dto.UserWordDTO">
+        DELETE FROM search_user_word
+        WHERE user_word_seq = #{userWordSeq}
+    </delete>
+
+
 </mapper>

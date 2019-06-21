@@ -35,11 +35,24 @@ public class SearchAdminController {
         return "boosting";
     }
 
-    @RequestMapping("/dictionary")
-    public String dictionary(Model model){
+    @RequestMapping("/dic/synonym")
+    public String synonymDictionary(Model model){
         model.addAttribute("apiUrl", urlProperty.getApi());
-        return "dictionary";
+        return "synonymDictionary";
     }
+
+    @RequestMapping("/dic/user")
+    public String UserDictionary(Model model){
+        model.addAttribute("apiUrl", urlProperty.getApi());
+        return "userDictionary";
+    }
+
+    @RequestMapping("/dic/stop")
+    public String stopDictionary(Model model){
+        model.addAttribute("apiUrl", urlProperty.getApi());
+        return "stopDictionary";
+    }
+
 
 
 

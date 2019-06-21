@@ -2,8 +2,10 @@ package com.pulmuone.demo.api.search.controller;
 
 import com.pulmuone.demo.api.search.domain.CategoryBoostDomain;
 import com.pulmuone.demo.api.search.domain.SynonymDomain;
+import com.pulmuone.demo.api.search.domain.UserDictionaryDomain;
 import com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO;
 import com.pulmuone.demo.api.search.dto.SynonymDTO;
+import com.pulmuone.demo.api.search.dto.UserWordDTO;
 import com.pulmuone.demo.api.search.service.ElasticSearchService;
 import com.pulmuone.demo.api.search.service.SearchAdminService;
 import com.pulmuone.demo.common.domain.ApiResult;
@@ -126,6 +128,59 @@ public class SearchAdminController {
         return ResponseEntity.ok(ApiResult.ok("반영완료"));
 
     }
+
+
+    @ApiOperation(value="고유어 리스트 조회", notes = "고유어 리스트 조회")
+    @RequestMapping(value = "/userword-list", method = RequestMethod.GET)
+    public ResponseEntity<ApiResult<List<UserDictionaryDomain>>> userWordList(@ApiParam("검색어") @RequestParam(value = "keyword", required = false) String keyword) throws Exception {
+
+        List<UserDictionaryDomain> list = searchAdminService.getUserWordList(keyword);
+        return ResponseEntity.ok(ApiResult.ok(list));
+    }
+
+
+    @ApiOperation(value="고유어 사전 수정", notes = "고유어 사전 항목 수정")
+    @RequestMapping(value = "/edit-userword", method = RequestMethod.POST)
+    public ResponseEntity<ApiResult<Integer>> editUserWord(@ApiParam("고유어 사전 정보") @RequestBody UserWordDTO userWordDTO) throws Exception {
+
+        int updatedCount = searchAdminService.updateUserWord(userWordDTO);
+
+        return ResponseEntity.ok(ApiResult.ok(updatedCount));
+    }
+
+    @ApiOperation(value="고유어 사전 항목 추가", notes = "고유어 사전 항목 추가")
+    @RequestMapping(value = "/add-userword", method = RequestMethod.POST)
+    public ResponseEntity<ApiResult<Integer>> addUserWord(@ApiParam("고유어 사전 정보") @RequestBody UserWordDTO userWordDTO) throws Exception {
+
+        int insertedCount = searchAdminService.insertUserWord(userWordDTO);
+
+        return ResponseEntity.ok(ApiResult.ok(insertedCount));
+    }
+
+    @ApiOperation(value="고유어 항목 삭제", notes = "고유어 항목 삭제")
+    @RequestMapping(value = "/remove-userword", method = RequestMethod.POST)
+    public ResponseEntity<ApiResult<Integer>> removeUserWord(@ApiParam("고유어 사전 정보") @RequestBody UserWordDTO userWordDTO) throws Exception {
+
+        int deletedCount = searchAdminService.deleteUserWord(userWordDTO);
+
+        return ResponseEntity.ok(ApiResult.ok(deletedCount));
+    }
+
+
+    @ApiOperation(value="고유어 정의 사진 엔진 반영", notes = "고유어 정의 사진 S3 업로드")
+    @RequestMapping(value = "/upload-userdict", method = RequestMethod.GET)
+    public ResponseEntity<ApiResult<String>> createUserDictionary() throws Exception {
+
+        searchAdminService.createUserDictionary();
+
+        return ResponseEntity.ok(ApiResult.ok("반영완료"));
+
+    }
+
+
+
+
+
 
 
 

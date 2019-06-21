@@ -2,8 +2,10 @@ package com.pulmuone.demo.api.search.mapper;
 
 import com.pulmuone.demo.api.search.domain.CategoryBoostDomain;
 import com.pulmuone.demo.api.search.domain.SynonymDomain;
+import com.pulmuone.demo.api.search.domain.UserDictionaryDomain;
 import com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO;
 import com.pulmuone.demo.api.search.dto.SynonymDTO;
+import com.pulmuone.demo.api.search.dto.UserWordDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,6 +23,14 @@ public interface SearchAdminMapper {
     int updateSynonym(SynonymDTO synonymDTO);
     int insertSynonym(SynonymDTO synonymDTO);
     int deleteSynonym(SynonymDTO synonymDTO);
-
     List<SynonymDomain>  selectAllSynonymList();
+    List<UserDictionaryDomain> selectAllUserWordList();
+
+    List<UserDictionaryDomain> selectUserWordList(@Param("keyword") String keyword);
+
+    int updateUserWord(UserWordDTO userWordDTO);
+
+    int insertUserWord(UserWordDTO userWordDTO);
+
+    int deleteUserWord(UserWordDTO userWordDTO);
 }
