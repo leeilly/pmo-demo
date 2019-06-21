@@ -16,5 +16,7 @@ public class ElasticsearchProperty {
     private String host;
     @Value("${pmo.elasticsearch.port}")
     private int port;
+    @Value("${pmo.elasticsearch.dic.path}")
+    private String dictionaryTempPath;
 
 }

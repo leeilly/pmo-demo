@@ -6,6 +6,7 @@ import com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO;
 import com.pulmuone.demo.api.search.dto.SynonymDTO;
 import com.pulmuone.demo.api.search.mapper.SearchAdminMapper;
 import com.pulmuone.demo.api.util.AmazonS3Util;
+import com.pulmuone.demo.common.property.ElasticsearchProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class SearchAdminService {
 
     @Autowired
     AmazonS3Util amazonS3Util;
+
+    @Autowired
+    ElasticsearchProperty elasticsearchProperty;
 
     public List<CategoryBoostDomain> getCategoryBoostList(String keyword) {
         log.info("keyword: {}", keyword);
@@ -61,7 +65,8 @@ public class SearchAdminService {
 
     public void createSynonymDictionary() {
 
-        String filePath = "/Users/kjlee/tmp/synonyms.txt";
+
+        String filePath = elasticsearchProperty.getDictionaryTempPath() + "/synonyms.txt";
         File file = new File(filePath);
 
         FileWriter writer = null;
