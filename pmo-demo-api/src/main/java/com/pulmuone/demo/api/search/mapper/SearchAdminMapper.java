@@ -36,7 +36,7 @@ public interface SearchAdminMapper {
 
     int deleteUserWord(UserWordDTO userWordDTO);
 
-    List<StopWordDictionaryDomain> selectStopWordList(String keyword);
+    List<StopWordDictionaryDomain> selectStopWordList(@Param("keyword") String keyword);
 
     int updateStopWord(StopWordDTO stopWordDTO);
 
