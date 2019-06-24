@@ -120,7 +120,7 @@
                 var that = this;
                 $("#search-btn").click(function(){
 
-                    var url = that.url.api + '/v1/search-admin/synonym-list';
+                    var url = that.url.api + '/v1/search-admin/synonym/list';
                     var keyword = $("#search-keyword").val().trim();
                     if( keyword != '' ){
                         url = url + '?keyword='+keyword;
@@ -185,7 +185,7 @@
                     synonymDTO.synonym = $input.val();
 
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/synonym-edit'
+                        url:  that.url.api + '/v1/search-admin/synonym/edit'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(synonymDTO)
@@ -226,7 +226,7 @@
                     synonymDTO.synonym = $keyword.val().trim();
 
                     $.ajax({
-                        url: that.url.api + '/v1/search-admin/add-synonym'
+                        url: that.url.api + '/v1/search-admin/synonym/add'
                         , type: 'POST'
                         , contentType: "application/json; charset=UTF-8"
                         , data: JSON.stringify(synonymDTO)
@@ -256,7 +256,7 @@
                     var synonymDTO = {};
                     synonymDTO.synonymSeq = synonymSeq;
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/remove-synonym'
+                        url:  that.url.api + '/v1/search-admin/synonym/remove'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(synonymDTO)
@@ -275,7 +275,7 @@
 
                     if( confirm("동의어 사전을 검색엔진에 반영하시겠습니까?") ) {
                         $.ajax({
-                            url: that.url.api + '/v1/search-admin/upload-synonym'
+                            url: that.url.api + '/v1/search-admin/synonym/upload'
                             , type: 'GET'
                             , contentType: "application/json; charset=UTF-8"
                             , success: function (result) {

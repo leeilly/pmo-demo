@@ -26,7 +26,7 @@
     <div class="form-row">
         <div>
             <div class="alert alert-info alert-dismissible" role="info">
-                <p>형태소 분석이 되지 않아야하는 (=쪼개지지 않아야하는) 단어</p>
+                <p>사용자 정의 명사</p>
             </div>
             <div class="alert alert-warning alert-dismissible" role="alert">
                 <p>변경 내용은 우선 DB에만 반영됩니다. </p>
@@ -123,7 +123,7 @@
                 var that = this;
                 $("#search-btn").click(function(){
 
-                    var url = that.url.api + '/v1/search-admin/userword-list';
+                    var url = that.url.api + '/v1/search-admin/user-word/list';
                     var keyword = $("#search-keyword").val().trim();
                     if( keyword != '' ){
                         url = url + '?keyword='+keyword;
@@ -144,7 +144,7 @@
                                 html += '<tr>' +
                                     '<th scope="row">'+(i+1)+'</th>' +
                                     '<td>' +
-                                    '   <input type="text" id="userword'+ item.userWord +'" value='+ item.userWord +' readonly="readonly" style="border:none;">' +
+                                    '   <input type="text" id="userword'+ item.userWordSeq +'" value='+ item.userWord +' readonly="readonly" style="border:none;">' +
                                     '   <span class="glyphicon glyphicon-pencil edit-btn" style="margin-left:20px;" aria-hidden="true" data-user-word-seq='+ item.userWordSeq +' ></span>' +
                                     '   <span class="glyphicon glyphicon-ok edit-ok-btn" style="margin-left:20px; display:none;" aria-hidden="true" data-user-word-seq='+ item.userWordSeq +'></span>' +
                                     '</td>'+
@@ -188,7 +188,7 @@
                     userWordDTO.userWord = $input.val();
 
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/edit-userword'
+                        url:  that.url.api + '/v1/search-admin/user-word/edit'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(userWordDTO)
@@ -229,7 +229,7 @@
                     userWordDTO.userWord = $keyword.val().trim();
 
                     $.ajax({
-                        url: that.url.api + '/v1/search-admin/add-userword'
+                        url: that.url.api + '/v1/search-admin/user-word/add'
                         , type: 'POST'
                         , contentType: "application/json; charset=UTF-8"
                         , data: JSON.stringify(userWordDTO)
@@ -259,7 +259,7 @@
                     var userWordDTO = {};
                     userWordDTO.userWordSeq = userWordSeq;
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/remove-userword'
+                        url:  that.url.api + '/v1/search-admin/user-word/remove'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(userWordDTO)
@@ -278,7 +278,7 @@
 
                     if( confirm("고유어 사전을 검색엔진에 반영하시겠습니까?") ) {
                         $.ajax({
-                            url: that.url.api + '/v1/search-admin/upload-userdict'
+                            url: that.url.api + '/v1/search-admin/user-word/upload'
                             , type: 'GET'
                             , contentType: "application/json; charset=UTF-8"
                             , success: function (result) {

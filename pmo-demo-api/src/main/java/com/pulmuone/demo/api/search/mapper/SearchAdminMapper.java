@@ -1,9 +1,11 @@
 package com.pulmuone.demo.api.search.mapper;
 
 import com.pulmuone.demo.api.search.domain.CategoryBoostDomain;
+import com.pulmuone.demo.api.search.domain.StopWordDictionaryDomain;
 import com.pulmuone.demo.api.search.domain.SynonymDomain;
 import com.pulmuone.demo.api.search.domain.UserDictionaryDomain;
 import com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO;
+import com.pulmuone.demo.api.search.dto.StopWordDTO;
 import com.pulmuone.demo.api.search.dto.SynonymDTO;
 import com.pulmuone.demo.api.search.dto.UserWordDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -33,4 +35,14 @@ public interface SearchAdminMapper {
     int insertUserWord(UserWordDTO userWordDTO);
 
     int deleteUserWord(UserWordDTO userWordDTO);
+
+    List<StopWordDictionaryDomain> selectStopWordList(String keyword);
+
+    int updateStopWord(StopWordDTO stopWordDTO);
+
+    int insertStopWord(StopWordDTO stopWordDTO);
+
+    int deleteStopWord(StopWordDTO stopWordDTO);
+
+    List<StopWordDictionaryDomain> selectAllStopWordList();
 }

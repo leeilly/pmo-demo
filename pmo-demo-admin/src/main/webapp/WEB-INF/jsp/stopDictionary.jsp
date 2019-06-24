@@ -26,6 +26,9 @@
     <br/>
     <div class="form-row">
         <div>
+            <div class="alert alert-info alert-dismissible" role="info">
+                <p>색인시에 색인어로 추출되지 않도록 하고 싶은 명사들입니다.</p>
+            </div>
             <div class="alert alert-warning alert-dismissible" role="alert">
                 <p>변경 내용은 우선 DB에만 반영됩니다. </p>
                 <p>검색결과에 적용하기 위해서는, </p>
@@ -40,7 +43,7 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">동의어</th>
+                    <th scope="col">불용어</th>
                     <th scope="col">수정일시</th>
                     <th scope="col">관리</th>
                 </tr>
@@ -73,13 +76,13 @@
                 <div class="form-group">
                     <form role="form">
                         <div class="form-group">
-                            <label for="synonym-keyword">키워드</label> <input type="text" class="form-control" id="synonym-keyword" placeholder="">
+                            <label for="stop-keyword">키워드</label> <input type="text" class="form-control" id="stop-keyword" placeholder="">
                         </div>
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-primary" id="add-synonym-btn">추가</button>
+                <button type="button" class="btn btn-sm btn-primary" id="add-stop-word-btn">추가</button>
                 <button type="button" class="btn btn-sm btn-default" id="modal-close-btn" data-dismiss="modal">닫기</button>
             </div>
         </div>
@@ -121,7 +124,7 @@
                 var that = this;
                 $("#search-btn").click(function(){
 
-                    var url = that.url.api + '/v1/search-admin/synonym-list';
+                    var url = that.url.api + '/v1/search-admin/stop-word/list';
                     var keyword = $("#search-keyword").val().trim();
                     if( keyword != '' ){
                         url = url + '?keyword='+keyword;
@@ -142,12 +145,12 @@
                                 html += '<tr>' +
                                     '<th scope="row">'+(i+1)+'</th>' +
                                     '<td>' +
-                                    '   <input type="text" id="synonym'+ item.synonymSeq +'" value='+ item.synonym +' readonly="readonly" style="border:none;">' +
-                                    '   <span class="glyphicon glyphicon-pencil edit-btn" style="margin-left:20px;" aria-hidden="true" data-synonym-seq='+ item.synonymSeq +' ></span>' +
-                                    '   <span class="glyphicon glyphicon-ok edit-ok-btn" style="margin-left:20px; display:none;" aria-hidden="true" data-synonym-seq='+ item.synonymSeq +'></span>' +
+                                    '   <input type="text" id="stop'+ item.stopWordSeq +'" value='+ item.stopWord +' readonly="readonly" style="border:none;">' +
+                                    '   <span class="glyphicon glyphicon-pencil edit-btn" style="margin-left:20px;" aria-hidden="true" data-stop-word-seq='+ item.stopWordSeq +' ></span>' +
+                                    '   <span class="glyphicon glyphicon-ok edit-ok-btn" style="margin-left:20px; display:none;" aria-hidden="true" data-stop-word-seq='+ item.stopWordSeq +'></span>' +
                                     '</td>'+
                                     '<td>' + item.modifiedYmdt + '</td>' +
-                                    '<td><span class="glyphicon glyphicon-remove remove-btn" aria-hidden="true" data-synonym-seq='+ item.synonymSeq +'></span></td>' +
+                                    '<td><span class="glyphicon glyphicon-remove remove-btn" aria-hidden="true" data-stop-word-seq='+ item.stopWordSeq +'></span></td>' +
                                     '</tr>';
                             });
 
@@ -160,9 +163,9 @@
 
             bindEditMode : function(){
                 $(document).on('click', '.edit-btn', function() {
-                    var synonymSeq = $(this).data('synonymSeq');
-                    console.log('edit -  synonym_seq: ' + synonymSeq );
-                    var $input = $("#synonym"+synonymSeq);
+                    var stopWordSeq = $(this).data('stopWordSeq');
+                    console.log('edit -  stopWordSeq: ' + stopWordSeq );
+                    var $input = $("#stop"+stopWordSeq);
                     if ($input.prop("readonly") == true) {
                         $input.prop("readonly", false);
                         $(this).hide();
@@ -177,19 +180,19 @@
                 var that = this;
                 $(document).on('click', '.edit-ok-btn', function() {
 
-                    var synonymSeq = $(this).data('synonymSeq');
-                    var $input = $("#synonym" + synonymSeq);
-                    console.log('edit ok - synonym_seq: ' + synonymSeq);
+                    var stopWordSeq = $(this).data('stopWordSeq');
+                    var $input = $("#stop" + stopWordSeq);
+                    console.log('edit ok - stopWordSeq: ' + stopWordSeq);
 
-                    var synonymDTO = {};
-                    synonymDTO.synonymSeq = synonymSeq;
-                    synonymDTO.synonym = $input.val();
+                    var stopWordDTO = {};
+                    stopWordDTO.stopWordSeq = stopWordSeq;
+                    stopWordDTO.stopWord = $input.val();
 
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/synonym-edit'
+                        url:  that.url.api + '/v1/search-admin/stop-word/edit'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
-                        , data: JSON.stringify(synonymDTO)
+                        , data: JSON.stringify(stopWordDTO)
                         , success: function (result) {
                             console.log(result);
                             alert('변경 되었습니다.\n(엔진 반영은 안된 상태)');
@@ -209,12 +212,12 @@
                     $("#add-modal").modal();
                 });
 
-                $("#add-synonym-btn").click(function () {
+                $("#add-stop-word-btn").click(function () {
 
-                    var $keyword = $("#synonym-keyword");
+                    var $keyword = $("#stop-keyword");
 
                     if ($keyword.val().trim() == '') {
-                        alert('동의어를 입력해주세요.');
+                        alert('불용어를 입력해주세요.');
                         $keyword.focus();
                         return;
                     }
@@ -223,14 +226,14 @@
                         return;
                     }
 
-                    var synonymDTO = {};
-                    synonymDTO.synonym = $keyword.val().trim();
+                    var stopWordDTO = {};
+                    stopWordDTO.stopWord = $keyword.val().trim();
 
                     $.ajax({
-                        url: that.url.api + '/v1/search-admin/add-synonym'
+                        url: that.url.api + '/v1/search-admin/stop-word/add'
                         , type: 'POST'
                         , contentType: "application/json; charset=UTF-8"
-                        , data: JSON.stringify(synonymDTO)
+                        , data: JSON.stringify(stopWordDTO)
                         , success: function (result) {
                             console.log(result);
                             alert('등록 되었습니다.\n(엔진 반영은 안된 상태)');
@@ -245,8 +248,8 @@
             bindDelete : function(){
                 var that = this;
                 $(document).on('click', '.remove-btn', function() {
-                    var synonymSeq = $(this).data('synonymSeq');
-                    console.log('remove - synonym_seq: ' + synonymSeq);
+                    var stopWordSeq = $(this).data('stopWordSeq');
+                    console.log('remove - stopWordSeq: ' + stopWordSeq);
 
                     if( !confirm("삭제하시겠습니까?")){
                         return;
@@ -254,13 +257,13 @@
 
                     $(this).closest('tr').remove();
 
-                    var synonymDTO = {};
-                    synonymDTO.synonymSeq = synonymSeq;
+                    var stopWordDTO = {};
+                    stopWordDTO.stopWordSeq = stopWordSeq;
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/remove-synonym'
+                        url:  that.url.api + '/v1/search-admin/stop-word/remove'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
-                        , data: JSON.stringify(synonymDTO)
+                        , data: JSON.stringify(stopWordDTO)
                         , success: function (result) {
                             console.log(result);
                             alert('삭제 되었습니다.\n(엔진 반영은 안된 상태)');
@@ -274,9 +277,9 @@
                 var that = this;
                 $("#apply-btn").click(function(){
 
-                    if( confirm("동의어 사전을 검색엔진에 반영하시겠습니까?") ) {
+                    if( confirm("불용어 사전을 검색엔진에 반영하시겠습니까?") ) {
                         $.ajax({
-                            url: that.url.api + '/v1/search-admin/upload-synonym'
+                            url: that.url.api + '/v1/search-admin/stop-word/upload'
                             , type: 'GET'
                             , contentType: "application/json; charset=UTF-8"
                             , success: function (result) {

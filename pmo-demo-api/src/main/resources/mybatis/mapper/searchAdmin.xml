@@ -97,7 +97,7 @@
     </select>
 
     <update id="updateUserWord" parameterType="com.pulmuone.demo.api.search.dto.UserWordDTO">
-        UPDATE user_word_seq
+        UPDATE search_user_word
         SET user_word = #{userWord}
         WHERE user_word_seq = #{userWordSeq}
     </update>
@@ -111,11 +111,49 @@
         )
     </insert>
 
-
     <delete id="deleteUserWord" parameterType="com.pulmuone.demo.api.search.dto.UserWordDTO">
         DELETE FROM search_user_word
         WHERE user_word_seq = #{userWordSeq}
     </delete>
+
+    <select id="selectStopWordList" resultType="com.pulmuone.demo.api.search.domain.StopWordDictionaryDomain">
+        SELECT
+        stop_word_seq
+        , stop_word
+        , modified_ymdt
+        FROM search_stop_word
+        <if test="keyword != null and keyword.length() > 0">
+            WHERE stop_word LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <update id="updateStopWord" parameterType="com.pulmuone.demo.api.search.dto.StopWordDTO">
+        UPDATE search_stop_word
+        SET stop_word = #{stopWord}
+        WHERE stop_word_seq = #{stopWordSeq}
+    </update>
+
+    <insert id="insertStopWord" parameterType="com.pulmuone.demo.api.search.dto.StopWordDTO">
+        INSERT INTO search_stop_word
+        (stop_word, modified_ymdt)
+        VALUES(
+            #{stopWord}
+            ,now()
+        )
+    </insert>
+
+    <delete id="deleteStopWord" parameterType="com.pulmuone.demo.api.search.dto.StopWordDTO">
+        DELETE FROM search_stop_word
+        WHERE stop_word_seq = #{stopWordSeq}
+    </delete>
+
+    <select id="selectAllStopWordList" resultType="com.pulmuone.demo.api.search.domain.StopWordDictionaryDomain">
+        SELECT
+        stop_word_seq
+        , stop_word
+        , modified_ymdt
+        FROM search_stop_word
+    </select>
 
 
 </mapper>

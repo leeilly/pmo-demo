@@ -1,9 +1,11 @@
 package com.pulmuone.demo.api.search.service;
 
 import com.pulmuone.demo.api.search.domain.CategoryBoostDomain;
+import com.pulmuone.demo.api.search.domain.StopWordDictionaryDomain;
 import com.pulmuone.demo.api.search.domain.SynonymDomain;
 import com.pulmuone.demo.api.search.domain.UserDictionaryDomain;
 import com.pulmuone.demo.api.search.dto.CategoryBoostScoreDTO;
+import com.pulmuone.demo.api.search.dto.StopWordDTO;
 import com.pulmuone.demo.api.search.dto.SynonymDTO;
 import com.pulmuone.demo.api.search.dto.UserWordDTO;
 import com.pulmuone.demo.api.search.mapper.SearchAdminMapper;
@@ -147,5 +149,55 @@ public class SearchAdminService {
 
     public int deleteUserWord(UserWordDTO userWordDTO) {
         return searchAdminMapper.deleteUserWord(userWordDTO);
+    }
+
+    public List<StopWordDictionaryDomain> getStopWordList(String keyword) {
+        return searchAdminMapper.selectStopWordList(keyword);
+    }
+
+    public int updateStopWord(StopWordDTO stopWordDTO) {
+        return searchAdminMapper.updateStopWord(stopWordDTO);
+
+    }
+
+    public int insertStopWord(StopWordDTO stopWordDTO) {
+        return searchAdminMapper.insertStopWord(stopWordDTO);
+    }
+
+    public int deleteStopWord(StopWordDTO stopWordDTO) {
+        return searchAdminMapper.deleteStopWord(stopWordDTO);
+    }
+
+    public void createStopWordDictionary() {
+        String filePath = elasticsearchProperty.getDictionaryTempPath() + "/stop.txt";
+        File file = new File(filePath);
+        FileWriter writer = null;
+
+        try{
+            writer = new FileWriter(file, false);
+            List<StopWordDictionaryDomain> list = searchAdminMapper.selectAllStopWordList();
+
+            FileWriter finalWriter = writer;
+            list.stream().forEach(
+                    s -> {
+                        try {
+                            finalWriter.append( s.getStopWord() +"\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
+            finalWriter.flush();
+            amazonS3Util.uploadFile(file);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try {
+                if(writer != null) writer.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

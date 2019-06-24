@@ -138,7 +138,7 @@
                 $("#search-btn").click(function(){
                     var keyword = $("#search-keyword").val().trim();
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/boosting-list?keyword='+keyword
+                        url:  that.url.api + '/v1/search-admin/boost/list?keyword='+keyword
                         ,type: 'GET'
                         , contentType:"application/json; charset=UTF-8"
                         , success: function (result) {
@@ -206,7 +206,7 @@
                     categoryBoostScoreDTO.score = $input_score.val();
 
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/boost-score'
+                        url:  that.url.api + '/v1/search-admin/boost/score/update'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(categoryBoostScoreDTO)
@@ -238,7 +238,7 @@
                     var categoryBoostScoreDTO = {};
                     categoryBoostScoreDTO.boostSeq = boostSeq;
                     $.ajax({
-                        url:  that.url.api + '/v1/search-admin/remove-boost'
+                        url:  that.url.api + '/v1/search-admin/boost/remove'
                         ,type: 'POST'
                         , contentType:"application/json; charset=UTF-8"
                         , data: JSON.stringify(categoryBoostScoreDTO)
@@ -258,7 +258,7 @@
 
                     if( confirm("부스팅 사전을 검색엔진에 반영하시겠습니까?") ) {
                         $.ajax({
-                            url: that.url.api + '/v1/search-admin/apply-boost'
+                            url: that.url.api + '/v1/search-admin/boost/apply'
                             , type: 'GET'
                             , contentType: "application/json; charset=UTF-8"
                             , success: function (result) {
@@ -319,7 +319,7 @@
                     categoryBoostScoreDTO.categoryName = categoryName;
 
                     $.ajax({
-                        url: that.url.api + '/v1/search-admin/add-boost'
+                        url: that.url.api + '/v1/search-admin/boost/add'
                         , type: 'POST'
                         , contentType: "application/json; charset=UTF-8"
                         , data: JSON.stringify(categoryBoostScoreDTO)
