@@ -23,6 +23,11 @@ public class ProductDocumentDomain {
     @JsonProperty
     private String name;
 
+    /** 상품명 */
+    @JsonProperty
+    private String nameNgram;
+
+
     /** 상품검색어 */
     @JsonProperty
     private String searchKeyword;

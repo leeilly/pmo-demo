@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.pulmuone.demo.api.search.domain.AnalyzeResultDomain;
+import com.pulmuone.demo.api.search.domain.ProductDocumentDomain;
 import com.pulmuone.demo.api.search.domain.SearchResult;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -214,6 +215,11 @@ public class ElasticSearchService<T> {
             newIndex = "product_" + new SimpleDateFormat ( "yyyyMMddHHmm").format(new Date());
             alias = PRODUCT_INDEX_ALIAS;
             list = (List<T>) searchIndexMapper.selectIndexTargetList();
+//            List<ProductDocumentDomain> productList = searchIndexMapper.selectIndexTargetList();
+//            productList.stream().forEach(l -> {
+//                l.setName(l.getName().replaceAll("\\[","").replaceAll("]",""));
+//            });
+//            list = (List<T>) productList;
         }else if( "ac".equals(type) ){
             newIndex = "ac" + new SimpleDateFormat ( "yyyyMMddHHmm").format(new Date());
             alias = AC_INDEX_ALIAS;

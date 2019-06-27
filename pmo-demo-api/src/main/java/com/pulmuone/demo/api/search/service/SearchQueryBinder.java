@@ -126,6 +126,7 @@ public class SearchQueryBinder {
         //fixme: 관리필요함.
         String[] keywordIndexFields = new String[]{
                 "name"
+                ,"name_ngram"
                 ,"search_keyword"
         };
 

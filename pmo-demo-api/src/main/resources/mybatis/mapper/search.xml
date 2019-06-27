@@ -5,6 +5,7 @@
         SELECT /* id=selectIndexTargetList */
             product_seq
             , name
+            , name as name_ngram
             , search_keyword
             , category_seq
             , category_name
@@ -37,5 +38,7 @@
             , modified_ymdt
         FROM search_boost_map
     </select>
+
+
 
 </mapper>
