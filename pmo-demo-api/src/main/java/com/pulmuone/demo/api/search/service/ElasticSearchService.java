@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.pulmuone.demo.api.search.domain.AnalyzeResultDomain;
-import com.pulmuone.demo.api.search.domain.ProductDocumentDomain;
 import com.pulmuone.demo.api.search.domain.SearchResult;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +27,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -275,5 +275,14 @@ public class ElasticSearchService<T> {
 
         return list;
     }
+
+
+    @PreDestroy
+    public void closeClient() throws Exception {
+        log.info("#close client");
+        restHighLevelClient.close();
+    }
+
+
 
 }
