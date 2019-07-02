@@ -53,6 +53,17 @@ public class SearchAdminController {
         return "stopDictionary";
     }
 
+    @RequestMapping("/indexing")
+    public String indexing(Model model){
+        model.addAttribute("apiUrl", urlProperty.getApi());
+        return "indexing";
+    }
+
+    @RequestMapping("/search-demo/ac")
+    public String indexingAutoComplete(Model model){
+        model.addAttribute("apiUrl", urlProperty.getApi());
+        return "autoCompleteSearchDemo";
+    }
 
 
 

@@ -25,8 +25,16 @@
                 </td>
             </tr>
             <tr>
+                <th></th>
+                <td><hr/></td>
+            </tr>
+            <tr>
                 <th>키워드 </th>
                 <td><textarea class="form-control col-sm-5" rows="3" id="keyword"></textarea></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><hr/></td>
             </tr>
             <tr>
                 <td></td>

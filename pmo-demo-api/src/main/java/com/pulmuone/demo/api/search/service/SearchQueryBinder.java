@@ -4,7 +4,6 @@ import com.pulmuone.demo.api.search.domain.CookingMinuteRangeCode;
 import com.pulmuone.demo.api.search.domain.KcalRangeCode;
 import com.pulmuone.demo.api.search.domain.SortCode;
 import com.pulmuone.demo.api.search.dto.SearchRequestDTO;
-import com.pulmuone.demo.api.search.parser.KoreanChosungParser;
 import com.pulmuone.demo.api.search.parser.KoreanJamoParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,13 +12,10 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Iterator;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
@@ -39,76 +35,26 @@ public class SearchQueryBinder {
             throw new Exception("[Search Exception] Search keyword must not be null.");
         }
 
-        /**
-         * POST /auto4/_search
-         * {
-         *   "query": {
-         *     "bool": {
-         *       "should": [
-         *         {
-         *           "prefix": {
-         *             "name": "생"
-         *           }
-         *         },
-         *         {
-         *           "term": {
-         *             "name": "생"
-         *           }
-         *         },
-         *         {
-         *           "term": {
-         *             "name_ngram": "생"
-         *           }
-         *         },
-         *         {
-         *           "term": {
-         *             "name_ngram_edge": "생"
-         *           }
-         *         },
-         *         {
-         *           "term": {
-         *             "name_ngram_edge_back": "생"
-         *           }
-         *         },
-         *         {
-         *           "term": {
-         *             "name_jamo": "ㅅㅐㅇ"
-         *           }
-         *         }
-         *       ],
-         *       "minimum_should_match": 1
-         *     }
-         *   },
-         *    "highlight" : {
-         *         "fields" : {
-         *             "name" : {}
-         *         }
-         *     }
-         * }
-         */
-
         KoreanJamoParser parser1 = new KoreanJamoParser();
-        log.info("jamo parser result: {}", parser1.parse(requestDTO.getKeyword()));
-
-        KoreanChosungParser parser2 = new KoreanChosungParser();
-        log.info("chosung parser result: {}", parser2.parse(requestDTO.getKeyword()));
-
         BoolQueryBuilder query = QueryBuilders.boolQuery();
         QueryBuilder prefixQuery = QueryBuilders.prefixQuery("name", requestDTO.getKeyword());
         query.should(prefixQuery);
 
-        QueryBuilder termQuery1 = QueryBuilders.termQuery("name_ngram", requestDTO.getKeyword());
-        QueryBuilder termQuery2 = QueryBuilders.termQuery("name_ngram_edge", requestDTO.getKeyword());
-        QueryBuilder termQuery3 = QueryBuilders.termQuery("name_ngram_edge_back", requestDTO.getKeyword());
-        //QueryBuilder termQuery4 = QueryBuilders.termQuery("name_chosung", parser2.parse(requestDTO.getKeyword()));
-        QueryBuilder termQuery5 = QueryBuilders.termQuery("name_jamo", parser1.parse(requestDTO.getKeyword()));
+        QueryBuilder termQueryNgram= QueryBuilders.termQuery("name_ngram", requestDTO.getKeyword());
+        QueryBuilder termQueryEdge = QueryBuilders.termQuery("name_ngram_edge", requestDTO.getKeyword());
+        QueryBuilder termQueryEdgeBack = QueryBuilders.termQuery("name_ngram_edge_back", requestDTO.getKeyword());
+        QueryBuilder termQueryJamo = QueryBuilders.termQuery("name_jamo", parser1.parse(requestDTO.getKeyword()));
 
-        query.should(termQuery1);
-        query.should(termQuery2);
-        query.should(termQuery3);
-        //query.should(termQuery4);
-        query.should(termQuery5);
-        query.minimumShouldMatch(1);
+        query.should(termQueryNgram);
+        query.should(termQueryEdge);
+        query.should(termQueryJamo);
+
+        if("any".equals(requestDTO.getMatchingType())){
+            query.should(termQueryEdgeBack);
+            query.minimumShouldMatch(1);
+        }else if("prefix".equals(requestDTO.getMatchingType())){
+            query.minimumShouldMatch(2);
+        }
 
         SearchSourceBuilder sourceQuery = autoCompleteSourceQuery(requestDTO);
         sourceQuery.query(query);
@@ -142,8 +88,6 @@ public class SearchQueryBinder {
             log.info("boostQuery: {}", boostQuery);
         }
 
-
-
         //선호 식품 필터
         if(StringUtils.isNotBlank(requestDTO.getPreferredFood())) {
             QueryBuilder preferredFoodQuery = matchQuery("ingredients", requestDTO.getPreferredFood()).operator(Operator.AND);
@@ -157,7 +101,6 @@ public class SearchQueryBinder {
         }
 
         //kcal
-        log.info("KcalRangeCode: {}", requestDTO.getKcalRangeCode());
         if( requestDTO.getKcalRangeCode() != null ) {
             QueryBuilder caloriesQuery = null;
             if (KcalRangeCode.KCAL200.equals(requestDTO.getKcalRangeCode())) {
@@ -170,9 +113,7 @@ public class SearchQueryBinder {
             query.must(caloriesQuery);
         }
 
-
         //조리시간
-        log.info("cookingMinCode: {}", requestDTO.getCookingMinuteRangeCode());
         if( requestDTO.getCookingMinuteRangeCode() != null ) {
             QueryBuilder cookingMinuteQuery = null;
             if (CookingMinuteRangeCode.M5.equals(requestDTO.getCookingMinuteRangeCode())) {
@@ -217,10 +158,18 @@ public class SearchQueryBinder {
 
     public SearchSourceBuilder autoCompleteSourceQuery(SearchRequestDTO requestDTO){
         SearchSourceBuilder sourceQuery = new SearchSourceBuilder();
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+
+        HighlightBuilder.Field highlightName = new HighlightBuilder.Field("name_ngram");
+        HighlightBuilder.Field highlightNameNgramEdge = new HighlightBuilder.Field("name_ngram_edge");
+        highlightName.highlighterType("unified");
+        highlightBuilder.field(highlightName);
+        highlightBuilder.field(highlightNameNgramEdge);
+        sourceQuery.highlighter(highlightBuilder);
 
         //Sort
-        SortCode sortCode = SortCode.SCORE;
-        sourceQuery.sort(sortCode.field(), sortCode.order());
+        //SortCode sortCode = SortCode.SCORE;
+        //sourceQuery.sort(sortCode.field(), sortCode.order());
         sourceQuery.trackScores(true);
 
         //Paging

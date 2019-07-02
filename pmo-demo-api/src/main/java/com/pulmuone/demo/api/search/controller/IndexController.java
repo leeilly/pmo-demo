@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -39,5 +40,24 @@ public class IndexController {
     ){
         List<AnalyzeResultDomain> termList = elasticSearchService.analyze(keyword, analyzerName);
         return ResponseEntity.ok(ApiResult.ok(termList));
+    }
+
+    @ApiOperation(value = "전체 색인", notes = "elasticsearch 전체 색인")
+    @RequestMapping(value = "bulk-index", method = RequestMethod.GET)
+    public void indexBulkWithAnalyzer( @ApiParam("인덱스 타켓 type: 상품=product / 자동완성=ac ") @RequestParam(value = "indexType", required = true) String indexType
+            ,@ApiParam("분석기 type") @RequestParam(value = "analyzerType", required = false) String analyzerType) throws Exception {
+
+        log.info("indexType: {}", indexType);
+        analyzerType = Optional.ofNullable(analyzerType).orElse("my_analyzer");
+        log.info("analyzerType: {}", analyzerType);
+        elasticSearchService.indexBulkWithAnalyzer(indexType, analyzerType);
+    }
+
+    @ApiOperation(value = "템플릿 업데이트", notes = "elasticsearch 색인 템플릿 정보 업데이트")
+    @RequestMapping(value = "/change-template", method = RequestMethod.GET)
+    public void putTemplate(@ApiParam("analyzerType") @RequestParam(value = "analyzerType", required = true) String analyzerType) {
+
+        log.info("analyzerType: {}", analyzerType);
+        elasticSearchService.putTemplate(analyzerType);
     }
 }

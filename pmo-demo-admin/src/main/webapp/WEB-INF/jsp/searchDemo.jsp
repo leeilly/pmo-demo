@@ -12,9 +12,18 @@
 </head>
 <body>
 <div class="container">
-    <h3>pmo search demo.</h3>
+    <h3>검색 결과 확인</h3>
+    <br/>
+    <div>
+        <ul class="nav nav-tabs">
+            <li><a href="/search-demo/ac">자동완성 검색</a></li>
+            <li class="active"><a href="/search-demo">상품 리스팅 검색</a></li>
+        </ul>
+    </div>
+
+    <br/>
+    <br/>
     <div class="input-append">
-        <br/>
         <input class="span2 .search-keyword" id="search-keyword" type="text">
         <button type="button" class="btn btn-sm btn-primary search-btn" id="search-btn">검색</button>
     </div>
@@ -101,7 +110,7 @@ var pmoApp = (function($) {
 
             this.bindSearch();
             this.bindFilterSearch();
-            this.bindAcSearch();
+            //this.bindAcSearch();
         },
 
         bindSearch : function(){

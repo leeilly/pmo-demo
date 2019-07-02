@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.pulmuone.demo.api.search.domain.AnalyzeResultDomain;
+import com.pulmuone.demo.api.search.domain.ProductAutoCompleteResultDomain;
 import com.pulmuone.demo.api.search.domain.SearchResult;
 import com.pulmuone.demo.api.search.mapper.SearchIndexMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.GetAliasesResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.PutIndexTemplateRequest;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +33,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -53,22 +53,52 @@ public class ElasticSearchService<T> {
     private static final ObjectMapper MAPPER = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 
-
     public static <T> List<T> convertResultList(SearchResponse response, Class<T> valueType) throws IllegalArgumentException, IOException {
         int initialSize = (int) (response.getHits().getTotalHits().value * 1.3);
         List<T> list = new ArrayList<>(initialSize);
-
         for(SearchHit hit : response.getHits()){
+            log.info("auto complete result: {}", hit);
             list.add(convertResult(hit, valueType));
         }
-
         return list;
     }
+
+    public static List<ProductAutoCompleteResultDomain> convertAutoCompleteResultList(SearchResponse response) throws IllegalArgumentException, IOException {
+        int initialSize = (int) (response.getHits().getTotalHits().value * 1.3);
+
+        List<ProductAutoCompleteResultDomain> list = new ArrayList<>(initialSize);
+
+        for(SearchHit hit : response.getHits()){
+            log.info("auto complete result: {}", hit);
+            list.add(convertAutoCompleteResult(hit));
+        }
+        return list;
+    }
+
+
+    public static ProductAutoCompleteResultDomain convertAutoCompleteResult(SearchHit hit) throws IOException, IllegalArgumentException{
+        log.info("hit.getSourceAsString(): {} ", hit.getSourceAsString());
+        ProductAutoCompleteResultDomain result = MAPPER.readValue(hit.getSourceAsString(), ProductAutoCompleteResultDomain.class);
+
+        log.info("hit.getHighlightFields(): {}", hit.getHighlightFields());
+
+        if( hit.getHighlightFields() != null ) {
+            if (hit.getHighlightFields().get("name_ngram") != null) {
+                result.setHighlight(String.valueOf(hit.getHighlightFields().get("name_ngram").getFragments()[0]));
+            } else if (hit.getHighlightFields().get("name_ngram_edge") != null) {
+                result.setHighlight(String.valueOf(hit.getHighlightFields().get("name_edge_ngram").getFragments()[0]));
+            }
+        }
+
+        log.info("result: {}", result.toString());
+        return result;
+    }
+
+
 
     public static <T> T convertResult(SearchHit hit, Class<T> valueType) throws IOException, IllegalArgumentException{
         log.info("hit.getSourceAsString(): {} ", hit.getSourceAsString());
         T result = MAPPER.readValue(hit.getSourceAsString(), valueType);
-
         return result;
     }
 
@@ -97,7 +127,7 @@ public class ElasticSearchService<T> {
 
         SearchResult result = new SearchResult();
         result.setCount(searchResponse.getHits().getTotalHits().value);
-        result.setSearchResult(convertResultList(searchResponse, valueType));
+        result.setSearchResult(convertAutoCompleteResultList(searchResponse));
 
         return result;
     }
@@ -148,7 +178,7 @@ public class ElasticSearchService<T> {
         IndicesAliasesRequest.AliasActions aliasAction =
                 new IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.REMOVE)
                         .index(index)
-                        .alias(alias);  //category_boost_dic
+                        .alias(alias);
         request.addAliasAction(aliasAction);
 
         AcknowledgedResponse indicesAliasesResponse = restHighLevelClient.indices().updateAliases(request, RequestOptions.DEFAULT);
@@ -284,5 +314,140 @@ public class ElasticSearchService<T> {
     }
 
 
+    public void indexBulkWithAnalyzer(String indexType, String analyzerType) throws IOException {
+        //todo: putTemplate
+        putTemplate(analyzerType);
+        bulkIndex(indexType);
 
+    }
+
+    public void putTemplate(String analyzer) {
+        PutIndexTemplateRequest request = new PutIndexTemplateRequest("product_template");
+        request.patterns(Arrays.asList("product*"));
+        request.source(
+                "{\n" +
+                        "  \"index_patterns\": \"product*\",\n" +
+                        "  \"settings\":{  \n" +
+                        "      \"number_of_shards\":3,\n" +
+                        "      \"number_of_replicas\":1,\n" +
+                        "      \"index\" : {\n" +
+                        "        \"analysis\": {\n" +
+                        "            \"tokenizer\": {\n" +
+                        "                \"nori_user_dict\": {\n" +
+                        "                        \"type\": \"nori_tokenizer\",\n" +
+                        "                        \"decompound_mode\": \"mixed\",\n" +
+                        "                        \"user_dictionary\": \"userdict_ko.txt\"\n" +
+                        "                },\n" +
+                        "                \"ngram_tokenizer\":{  \n" +
+                        "                       \"type\":\"nGram\",\n" +
+                        "                       \"min_gram\":\"1\",\n" +
+                        "                       \"max_gram\":\"2\",\n" +
+                        "                       \"token_chars\":[  \n" +
+                        "                          \"letter\",\n" +
+                        "                          \"digit\",\n" +
+                        "                          \"punctuation\",\n" +
+                        "                          \"symbol\"\n" +
+                        "                       ]\n" +
+                        "                },\n" +
+                        "                 \"edge_ngram_tokenizer\" : {\n" +
+                        "                      \"type\" : \"edgeNGram\",\n" +
+                        "                      \"min_gram\" : \"1\",\n" +
+                        "                      \"max_gram\" : \"10\",\n" +
+                        "                      \"token_chars\": [ \"letter\", \"digit\", \"punctuation\", \"symbol\" ]\n" +
+                        "                  }      \n" +
+                        "            },\n" +
+                        "            \"analyzer\": {\n" +
+                        "                \"my_analyzer\": {\n" +
+                        "                        \"type\": \"custom\",\n" +
+                        "                        \"tokenizer\":\"nori_user_dict\",\n" +
+                        "                        \"filter\": [\"synonym\", \"stop\"]\n" +
+                        "                },\n" +
+                        "                \"ngram_analyzer\":{  \n" +
+                        "                   \"type\":\"custom\",\n" +
+                        "                   \"tokenizer\":\"ngram_tokenizer\",\n" +
+                        "                   \"filter\":[  \n" +
+                        "                      \"lowercase\",\n" +
+                        "                      \"trim\"\n" +
+                        "                   ]\n" +
+                        "               },\n" +
+                        "                \"edge_ngram_analyzer\" : {\n" +
+                        "              \t\t\t\"type\" : \"custom\",\n" +
+                        "              \t\t\t\"tokenizer\" : \"edge_ngram_tokenizer\",\n" +
+                        "              \t\t\t\"filter\" : [\"lowercase\", \"trim\"]\n" +
+                        "                }\n" +
+                        "             },\n" +
+                        "             \"filter\":{\n" +
+                        "                \"synonym\":{\n" +
+                        "                  \"type\": \"synonym\",\n" +
+                        "                  \"synonyms_path\": \"synonyms.txt\"\n" +
+                        "                },\n" +
+                        "                \"stop\":{\n" +
+                        "                  \"type\":\"stop\",\n" +
+                        "                  \"stopwords_path\":\"stop.txt\"\n" +
+                        "                },\n" +
+                        "                \"nori_filter\":{\n" +
+                        "                  \"type\":\"nori_part_of_speech\",\n" +
+                        "                   \"stoptags\": [\n" +
+                        "                        \"SSO\",\"SSC\",\"SC\",\"SF\",\"SE\"   \n" +
+                        "                     ]\n" +
+                        "                }\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "      }\n" +
+                        "   },\n" +
+                        "   \"mappings\": {\n" +
+                        "    \"_source\": {\n" +
+                        "      \"enabled\": true\n" +
+                        "    },\n" +
+                        "    \"properties\":{  \n" +
+                        "            \"product_seq\":{  \n" +
+                        "               \"type\":\"integer\"\n" +
+                        "            },\n" +
+                        "            \"name\":{  \n" +
+                        "               \"type\":\"text\"\n" +
+                        "               ,\"analyzer\":\"" + analyzer + "\"\n" +
+                        "            },\n" +
+                        "            \"name_ngram\":{  \n" +
+                        "               \"type\":\"text\"\n" +
+                        "               ,\"analyzer\":\"ngram_analyzer\"\n" +
+                        "               ,\"search_analyzer\": \"ngram_analyzer\"\n" +
+                        "            },\n" +
+                        "            \"search_keyword\":{  \n" +
+                        "               \"type\":\"text\"\n" +
+                        "            },\n" +
+                        "            \"category_seq\":{  \n" +
+                        "               \"type\":\"integer\"\n" +
+                        "            },\n" +
+                        "            \"category_name\":{  \n" +
+                        "               \"type\":\"text\"\n" +
+                        "            },\n" +
+                        "            \"score\":{  \n" +
+                        "               \"type\":\"integer\"\n" +
+                        "            },\n" +
+                        "            \"kcal\":{\n" +
+                        "               \"type\":\"integer\"\n" +
+                        "            },\n" +
+                        "            \"cooking_minute\":{\n" +
+                        "               \"type\":\"integer\"\n" +
+                        "            },\n" +
+                        "            \"ingredients\":{\n" +
+                        "               \"type\":\"text\"\n" +
+                        "            },\n" +
+                        "            \"create_ymdt\":{  \n" +
+                        "               \"type\":\"date\"\n" +
+                        "            }\n" +
+                        "     }\n" +
+                        "  }\n" +
+                        "}", XContentType.JSON);
+
+        try {
+            AcknowledgedResponse putTemplateResponse = restHighLevelClient.indices().putTemplate(request, RequestOptions.DEFAULT);
+            if(putTemplateResponse.isAcknowledged()){
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

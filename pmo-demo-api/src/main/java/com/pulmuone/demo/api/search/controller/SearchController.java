@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -89,6 +90,7 @@ public class SearchController {
     @RequestMapping(value = "/product/auto_complete", method = RequestMethod.GET)
     public ResponseEntity<ApiResult<SearchResult>> searchAutoComplete(
             @ApiParam("검색어") @RequestParam(value = "keyword", required = true) String keyword,
+            @ApiParam("매칭타입 (optional)") @RequestParam(value = "matchingType", required = false) String matchingType,
             @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
             @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
             @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
@@ -98,6 +100,7 @@ public class SearchController {
         dto.setKeyword(keyword);
         dto.setPage(pageNumber);
         dto.setLimit(limit);
+        dto.setMatchingType(Optional.ofNullable(matchingType).orElse("any"));
         if(StringUtils.isNotBlank(sortCode)) {
             dto.setSortCode(SortCode.valueOf(sortCode));
         }

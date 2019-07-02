@@ -39,4 +39,6 @@ public class SearchRequestDTO {
 
     private Map<Integer, Integer> categoryBoostingMap;
 
+    private String matchingType;
+
 }
