@@ -85,7 +85,7 @@ public class SearchQueryBinder {
         for( Integer categoreSeq : requestDTO.getCategoryBoostingMap().keySet() ){
             QueryBuilder boostQuery = QueryBuilders.matchQuery("category_seq", categoreSeq ).operator(Operator.AND).boost(requestDTO.getCategoryBoostingMap().get(categoreSeq));
             query.should(boostQuery);
-            log.info("boostQuery: {}", boostQuery);
+
         }
 
         //선호 식품 필터
@@ -128,8 +128,6 @@ public class SearchQueryBinder {
 
         SearchSourceBuilder sourceQuery = sourceQuery(requestDTO);
         sourceQuery.query(query);
-
-        log.info("source query: {}", sourceQuery.toString());
 
         return sourceQuery;
     }
@@ -194,8 +192,6 @@ public class SearchQueryBinder {
 
         SearchSourceBuilder sourceQuery = new SearchSourceBuilder();
         sourceQuery.query(query);
-
-        log.info("boost query: {}", query);
 
         return sourceQuery;
 

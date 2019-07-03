@@ -57,7 +57,7 @@ public class ElasticSearchService<T> {
         int initialSize = (int) (response.getHits().getTotalHits().value * 1.3);
         List<T> list = new ArrayList<>(initialSize);
         for(SearchHit hit : response.getHits()){
-            //log.info("auto complete result: {}", hit);
+
             list.add(convertResult(hit, valueType));
         }
         return list;
@@ -69,7 +69,7 @@ public class ElasticSearchService<T> {
         List<ProductAutoCompleteResultDomain> list = new ArrayList<>(initialSize);
 
         for(SearchHit hit : response.getHits()){
-            //log.info("auto complete result: {}", hit);
+
             list.add(convertAutoCompleteResult(hit));
         }
         return list;
@@ -77,10 +77,8 @@ public class ElasticSearchService<T> {
 
 
     public static ProductAutoCompleteResultDomain convertAutoCompleteResult(SearchHit hit) throws IOException, IllegalArgumentException{
-        //log.info("hit.getSourceAsString(): {} ", hit.getSourceAsString());
-        ProductAutoCompleteResultDomain result = MAPPER.readValue(hit.getSourceAsString(), ProductAutoCompleteResultDomain.class);
 
-        //log.info("hit.getHighlightFields(): {}", hit.getHighlightFields());
+        ProductAutoCompleteResultDomain result = MAPPER.readValue(hit.getSourceAsString(), ProductAutoCompleteResultDomain.class);
 
         if( hit.getHighlightFields() != null ) {
             if (hit.getHighlightFields().get("name_ngram") != null) {
@@ -90,14 +88,13 @@ public class ElasticSearchService<T> {
             }
         }
 
-        //log.info("result: {}", result.toString());
         return result;
     }
 
 
 
     public static <T> T convertResult(SearchHit hit, Class<T> valueType) throws IOException, IllegalArgumentException{
-        //log.info("hit.getSourceAsString(): {} ", hit.getSourceAsString());
+
         T result = MAPPER.readValue(hit.getSourceAsString(), valueType);
         return result;
     }
@@ -108,8 +105,6 @@ public class ElasticSearchService<T> {
         searchRequest.indices(PRODUCT_INDEX_ALIAS);
         searchRequest.source(query);
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-
-        //log.info("searchResponse.getHits(): {}", searchResponse.getHits()) ;
 
         SearchResult result = new SearchResult();
         result.setCount(searchResponse.getHits().getTotalHits().value);
@@ -137,8 +132,6 @@ public class ElasticSearchService<T> {
         searchRequest.indices(CATEGORY_BOOST_INDEX_ALIAS);
         searchRequest.source(query);
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-
-        //log.info("searchResponse.getHits(): {}", searchResponse.getHits()) ;
 
         SearchResult result = new SearchResult();
         result.setCount(searchResponse.getHits().getTotalHits().value);
