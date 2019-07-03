@@ -156,6 +156,7 @@ public class SearchQueryBinder {
     }
 
 
+
     public SearchSourceBuilder autoCompleteSourceQuery(SearchRequestDTO requestDTO){
         SearchSourceBuilder sourceQuery = new SearchSourceBuilder();
         HighlightBuilder highlightBuilder = new HighlightBuilder();

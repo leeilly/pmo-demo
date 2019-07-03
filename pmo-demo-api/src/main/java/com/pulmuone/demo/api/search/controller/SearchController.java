@@ -47,6 +47,8 @@ public class SearchController {
             return ResponseEntity.ok(ApiResult.ok(new SearchResult()));
         }
 
+        log.info("search keyword: {}", keyword);
+
         SearchRequestDTO dto = new SearchRequestDTO();
         dto.setBoostCategorySeq(1);
         dto.setKeyword(keyword);
@@ -94,7 +96,6 @@ public class SearchController {
             @ApiParam("정렬 코드 (optional)") @RequestParam(value = "sortCode", required = false) String sortCode,
             @ApiParam("최대 조회 건수(default: false)") @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
             @ApiParam("페이지 번호(default: 0)") @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) throws Exception {
-
 
         SearchRequestDTO dto = new SearchRequestDTO();
         dto.setKeyword(keyword);
