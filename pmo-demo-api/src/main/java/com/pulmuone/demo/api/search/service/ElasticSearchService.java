@@ -90,7 +90,7 @@ public class ElasticSearchService<T> {
             }
         }
 
-        log.info("result: {}", result.toString());
+        //log.info("result: {}", result.toString());
         return result;
     }
 
