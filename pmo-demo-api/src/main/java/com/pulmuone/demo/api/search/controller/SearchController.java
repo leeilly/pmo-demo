@@ -47,7 +47,7 @@ public class SearchController {
             return ResponseEntity.ok(ApiResult.ok(new SearchResult()));
         }
 
-        log.info("search keyword: {}", keyword);
+        log.debug("search keyword: {}", keyword);
 
         SearchRequestDTO dto = new SearchRequestDTO();
         dto.setBoostCategorySeq(1);
