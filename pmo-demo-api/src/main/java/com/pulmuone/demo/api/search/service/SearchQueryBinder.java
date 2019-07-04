@@ -59,6 +59,8 @@ public class SearchQueryBinder {
         SearchSourceBuilder sourceQuery = autoCompleteSourceQuery(requestDTO);
         sourceQuery.query(query);
 
+        log.info("query: {}", sourceQuery.toString());
+
         return sourceQuery;
 
     }
@@ -128,6 +130,8 @@ public class SearchQueryBinder {
 
         SearchSourceBuilder sourceQuery = sourceQuery(requestDTO);
         sourceQuery.query(query);
+
+        log.info("query: {}", sourceQuery.toString());
 
         return sourceQuery;
     }
